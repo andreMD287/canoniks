@@ -13,6 +13,17 @@ import Bodega from "./screens/13_Bodega";
 import BodegaVista from "./screens/13_BodegaVista";
 import RetoCompletado from "./screens/14_RetoCompletado";
 import SalaExposicion from "./screens/15_SalaExposicion";
+import R2Mision from "./screens/reto2/01_Mision";
+import R2Documentos from "./screens/reto2/02_Documentos";
+import R2Patente from "./screens/reto2/03_Patente";
+import R2Identificar from "./screens/reto2/04_Identificar";
+import R2Carta from "./screens/reto2/05_Carta";
+import R2Contrastar from "./screens/reto2/06_Contrastar";
+import R2Restituir from "./screens/reto2/07_Restituir";
+import R2PatenteRestaurada from "./screens/reto2/08_PatenteRestaurada";
+import R2OjoAlDato from "./screens/reto2/09_OjoAlDato";
+import R2Galeria from "./screens/reto2/10_Galeria";
+import R2Cierre from "./screens/reto2/11_Cierre";
 import archivador from "./assets/menu2-archivador.svg";
 import { MAX_INTENTOS } from "./data/pregunta";
 
@@ -20,6 +31,7 @@ const SCREENS = {
   CARRUSEL: "carrusel",
   MENU: "menu",
   MENU_2: "menu2",
+  // Reto 1 · El cuerpo que no estaba en el modelo
   MISION: "mision",
   EXPEDIENTES: "expedientes",
   EXPEDIENTE_A: "expedienteA",
@@ -32,6 +44,18 @@ const SCREENS = {
   BODEGA_VISTA: "bodegaVista",
   COMPLETADO: "completado",
   SALA: "sala",
+  // Reto 2 · El caso Perriand
+  R2_MISION: "r2Mision",
+  R2_DOCUMENTOS: "r2Documentos",
+  R2_PATENTE: "r2Patente",
+  R2_IDENTIFICAR: "r2Identificar",
+  R2_CARTA: "r2Carta",
+  R2_CONTRASTAR: "r2Contrastar",
+  R2_RESTITUIR: "r2Restituir",
+  R2_RESTAURADA: "r2Restaurada",
+  R2_OJO: "r2Ojo",
+  R2_GALERIA: "r2Galeria",
+  R2_CIERRE: "r2Cierre",
 };
 
 const DESCRIPCION_SALA =
@@ -39,27 +63,37 @@ const DESCRIPCION_SALA =
   "perspectiva particular cuando se convierte en estándar para todas las personas.";
 
 /**
- * Flujo del Expediente 01:
- *  carrusel (fachada + qué podrás hacer) → menu (el archivo, una sala por
- *  pantalla) → 01 Misión → 02 Expedientes → 03 A / 04 B (hay que abrir los
- *  dos) → 05 Comparar → 06-10 Pregunta (3 intentos; sólo se avanza acertando)
- *     · acierta  → 12 Respuesta correcta → 13 Encuentra la escultura
- *                  → 13 Bodega (se toca la foto) → 14 Reto completado
- *                  → 15 Sala 1
- *     · 3 fallos → 11 Sin intentos → salir al archivo (el reto no se completa)
+ * Archivo del Museo de las Ausencias.
  *
- * El ojo de la barra superior vuelve al archivo (el menu) desde cualquier
- * pantalla. La Sala 2 ya tiene su portada, pero su reto está por implementar.
+ *  carrusel (fachada + qué podrás hacer) → menu (una sala por pantalla)
+ *
+ *  Sala 1 · El cuerpo que no estaba en el modelo
+ *    01 Misión → 02 Expedientes → 03 A / 04 B (hay que abrir los dos)
+ *    → 05 Comparar → 06-10 Pregunta (3 intentos; sólo se avanza acertando)
+ *       · acierta  → 12 Correcta → 13 Encuentra la escultura → 13 Bodega
+ *                    → 14 Reto completado → 15 Sala 1
+ *       · 3 fallos → 11 Sin intentos → salir al archivo
+ *
+ *  Sala 2 · El caso Perriand
+ *    Misión → Documentos → Patente → Identificar → Carta → Contrastar
+ *    → Restituir la firma → Patente restaurada → Ojo al dato → Sala 2
+ *    → Cierre
+ *
+ * El ojo de la barra superior vuelve al archivo desde cualquier pantalla.
  */
 export default function App() {
   const [screen, setScreen] = useState(SCREENS.CARRUSEL);
+  // Reto 1
   const [leidoA, setLeidoA] = useState(false);
   const [leidoB, setLeidoB] = useState(false);
   const [volverDeB, setVolverDeB] = useState(SCREENS.EXPEDIENTES);
   const [intentosUsados, setIntentosUsados] = useState(0);
   const [resuelta, setResuelta] = useState(false);
+  // Reto 2: nombres marcados en la patente de 1928
+  const [identificados, setIdentificados] = useState([]);
 
   const irAlArchivo = () => setScreen(SCREENS.MENU);
+  const irAlArchivo2 = () => setScreen(SCREENS.MENU_2);
 
   const abrirA = () => {
     setLeidoA(true);
@@ -97,23 +131,27 @@ export default function App() {
     setScreen(SCREENS.MENU);
   };
 
+  const reiniciar2 = () => {
+    setIdentificados([]);
+    setScreen(SCREENS.MENU_2);
+  };
+
   const home = { onHome: irAlArchivo };
+  const ir = (destino) => () => setScreen(destino);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#0b0b14] py-10">
-      {screen === SCREENS.CARRUSEL && (
-        <Carrusel onExplorar={irAlArchivo} />
-      )}
+      {screen === SCREENS.CARRUSEL && <Carrusel onExplorar={irAlArchivo} />}
 
       {screen === SCREENS.MENU && (
         <Menu
           sala="Sala 1"
           titulo="El conocimiento desde una sola mirada"
           descripcion={DESCRIPCION_SALA}
-          onBack={() => setScreen(SCREENS.CARRUSEL)}
-          onSalaAnterior={() => setScreen(SCREENS.MENU_2)}
-          onSalaSiguiente={() => setScreen(SCREENS.MENU_2)}
-          onEntrar={() => setScreen(SCREENS.MISION)}
+          onBack={ir(SCREENS.CARRUSEL)}
+          onSalaAnterior={irAlArchivo2}
+          onSalaSiguiente={irAlArchivo2}
+          onEntrar={ir(SCREENS.MISION)}
         />
       )}
 
@@ -123,29 +161,30 @@ export default function App() {
           titulo="Cuando saber no significa, ser escuchada"
           descripcion={DESCRIPCION_SALA}
           ilustracion={archivador}
-          disponible={false}
-          onBack={() => setScreen(SCREENS.CARRUSEL)}
+          onBack={ir(SCREENS.CARRUSEL)}
           onSalaAnterior={irAlArchivo}
           onSalaSiguiente={irAlArchivo}
-          onEntrar={() => {}}
+          onEntrar={ir(SCREENS.R2_MISION)}
         />
       )}
+
+      {/* ---------- Sala 1 ---------- */}
 
       {screen === SCREENS.MISION && (
         <MisionDelReto
           {...home}
           onBack={irAlArchivo}
-          onOpenExpediente={() => setScreen(SCREENS.EXPEDIENTES)}
+          onOpenExpediente={ir(SCREENS.EXPEDIENTES)}
         />
       )}
 
       {screen === SCREENS.EXPEDIENTES && (
         <Expedientes
           {...home}
-          onBack={() => setScreen(SCREENS.MISION)}
+          onBack={ir(SCREENS.MISION)}
           onOpenA={abrirA}
           onOpenB={() => abrirB(SCREENS.EXPEDIENTES)}
-          onComparar={() => setScreen(SCREENS.COMPARAR)}
+          onComparar={ir(SCREENS.COMPARAR)}
           leidoA={leidoA}
           leidoB={leidoB}
         />
@@ -154,7 +193,7 @@ export default function App() {
       {screen === SCREENS.EXPEDIENTE_A && (
         <ExpedienteA
           {...home}
-          onBack={() => setScreen(SCREENS.EXPEDIENTES)}
+          onBack={ir(SCREENS.EXPEDIENTES)}
           onLeerExpedienteB={() => abrirB(SCREENS.EXPEDIENTE_A)}
         />
       )}
@@ -163,7 +202,7 @@ export default function App() {
         <ExpedienteB
           {...home}
           onBack={() => setScreen(volverDeB)}
-          onComparar={() => setScreen(SCREENS.COMPARAR)}
+          onComparar={ir(SCREENS.COMPARAR)}
           puedeComparar={leidoA}
         />
       )}
@@ -171,7 +210,7 @@ export default function App() {
       {screen === SCREENS.COMPARAR && (
         <Comparar
           {...home}
-          onBack={() => setScreen(SCREENS.EXPEDIENTES)}
+          onBack={ir(SCREENS.EXPEDIENTES)}
           onIrALaPregunta={irALaPregunta}
         />
       )}
@@ -192,40 +231,135 @@ export default function App() {
       {screen === SCREENS.CORRECTA && (
         <RespuestaCorrecta
           {...home}
-          onBack={() => setScreen(SCREENS.COMPARAR)}
-          onIrALaBodega={() => setScreen(SCREENS.BODEGA)}
+          onBack={ir(SCREENS.COMPARAR)}
+          onIrALaBodega={ir(SCREENS.BODEGA)}
         />
       )}
 
       {screen === SCREENS.BODEGA && (
         <Bodega
           {...home}
-          onBack={() => setScreen(SCREENS.CORRECTA)}
-          onEntrarALaBodega={() => setScreen(SCREENS.BODEGA_VISTA)}
+          onBack={ir(SCREENS.CORRECTA)}
+          onEntrarALaBodega={ir(SCREENS.BODEGA_VISTA)}
         />
       )}
 
       {screen === SCREENS.BODEGA_VISTA && (
         <BodegaVista
           {...home}
-          onBack={() => setScreen(SCREENS.BODEGA)}
-          onEncontrar={() => setScreen(SCREENS.COMPLETADO)}
+          onBack={ir(SCREENS.BODEGA)}
+          onEncontrar={ir(SCREENS.COMPLETADO)}
         />
       )}
 
       {screen === SCREENS.COMPLETADO && (
         <RetoCompletado
           {...home}
-          onBack={() => setScreen(SCREENS.BODEGA_VISTA)}
-          onVerLaSala={() => setScreen(SCREENS.SALA)}
+          onBack={ir(SCREENS.BODEGA_VISTA)}
+          onVerLaSala={ir(SCREENS.SALA)}
         />
       )}
 
       {screen === SCREENS.SALA && (
         <SalaExposicion
           {...home}
-          onBack={() => setScreen(SCREENS.COMPLETADO)}
+          onBack={ir(SCREENS.COMPLETADO)}
           onVolver={reiniciar}
+        />
+      )}
+
+      {/* ---------- Sala 2 ---------- */}
+
+      {screen === SCREENS.R2_MISION && (
+        <R2Mision
+          onHome={irAlArchivo2}
+          onBack={irAlArchivo2}
+          onAbrir={ir(SCREENS.R2_DOCUMENTOS)}
+        />
+      )}
+
+      {screen === SCREENS.R2_DOCUMENTOS && (
+        <R2Documentos
+          onHome={irAlArchivo2}
+          onBack={ir(SCREENS.R2_MISION)}
+          onVerPatente={ir(SCREENS.R2_PATENTE)}
+          onVerCarta={ir(SCREENS.R2_CARTA)}
+        />
+      )}
+
+      {screen === SCREENS.R2_PATENTE && (
+        <R2Patente
+          onHome={irAlArchivo2}
+          onBack={ir(SCREENS.R2_DOCUMENTOS)}
+          onSeguir={ir(SCREENS.R2_IDENTIFICAR)}
+        />
+      )}
+
+      {screen === SCREENS.R2_IDENTIFICAR && (
+        <R2Identificar
+          onHome={irAlArchivo2}
+          onBack={ir(SCREENS.R2_PATENTE)}
+          onGuardar={(nombres) => {
+            setIdentificados(nombres);
+            setScreen(SCREENS.R2_CARTA);
+          }}
+        />
+      )}
+
+      {screen === SCREENS.R2_CARTA && (
+        <R2Carta
+          onHome={irAlArchivo2}
+          onBack={ir(SCREENS.R2_IDENTIFICAR)}
+          onSeguir={ir(SCREENS.R2_CONTRASTAR)}
+        />
+      )}
+
+      {screen === SCREENS.R2_CONTRASTAR && (
+        <R2Contrastar
+          onHome={irAlArchivo2}
+          onBack={ir(SCREENS.R2_CARTA)}
+          onReconstruir={ir(SCREENS.R2_RESTITUIR)}
+          identificados={identificados}
+        />
+      )}
+
+      {screen === SCREENS.R2_RESTITUIR && (
+        <R2Restituir
+          onHome={irAlArchivo2}
+          onBack={ir(SCREENS.R2_CONTRASTAR)}
+          onRestituir={ir(SCREENS.R2_RESTAURADA)}
+        />
+      )}
+
+      {screen === SCREENS.R2_RESTAURADA && (
+        <R2PatenteRestaurada
+          onHome={irAlArchivo2}
+          onBack={ir(SCREENS.R2_RESTITUIR)}
+          onSeguir={ir(SCREENS.R2_OJO)}
+        />
+      )}
+
+      {screen === SCREENS.R2_OJO && (
+        <R2OjoAlDato
+          onHome={irAlArchivo2}
+          onBack={ir(SCREENS.R2_RESTAURADA)}
+          onVerLaSala={ir(SCREENS.R2_GALERIA)}
+        />
+      )}
+
+      {screen === SCREENS.R2_GALERIA && (
+        <R2Galeria
+          onHome={irAlArchivo2}
+          onBack={ir(SCREENS.R2_OJO)}
+          onCerrar={ir(SCREENS.R2_CIERRE)}
+        />
+      )}
+
+      {screen === SCREENS.R2_CIERRE && (
+        <R2Cierre
+          onHome={irAlArchivo2}
+          onBack={ir(SCREENS.R2_GALERIA)}
+          onVolver={reiniciar2}
         />
       )}
     </div>
