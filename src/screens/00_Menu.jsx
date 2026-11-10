@@ -12,13 +12,17 @@ import chevron3 from "../assets/menu-chevron-3.svg";
  * El home del archivo: una sala por pantalla. Las alas verdes de los lados
  * cambian de sala y el indicador de abajo entra al expediente.
  *
- * `ilustracion` es opcional (la Sala 2 lleva el archivador).
+ * `ilustracion` es opcional y se pinta tal cual: cada sala coloca sus propias
+ * imágenes en la posición que marca el diseño.
  */
 export default function Menu({
   sala,
   titulo,
   descripcion,
   ilustracion,
+  // la Sala 3 lleva la descripción algo más estrecha y más abajo
+  descripcionAncho = 354,
+  descripcionTop = 599.5,
   disponible = true,
   onBack,
   onSalaAnterior,
@@ -54,14 +58,7 @@ export default function Menu({
         className="pointer-events-none absolute left-[337px] top-[27px] block h-[48px] w-[57.15px] max-w-none"
       />
 
-      {ilustracion && (
-        <img
-          src={ilustracion}
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute left-[20px] top-[83px] block h-[338px] w-[372px] max-w-none"
-        />
-      )}
+      {ilustracion}
 
       <p className="absolute left-[155.5px] top-[415px] -translate-y-1/2 whitespace-nowrap text-[35.876px] font-semibold text-white">
         {sala}
@@ -79,7 +76,10 @@ export default function Menu({
         </div>
       </div>
 
-      <p className="absolute left-[206px] top-[599.5px] w-[354px] -translate-x-1/2 -translate-y-1/2 text-center text-[14px] leading-[1.2] text-[#ddd]">
+      <p
+        className="absolute -translate-x-1/2 -translate-y-1/2 text-center text-[14px] leading-[1.2] text-[#ddd]"
+        style={{ left: 206, top: descripcionTop, width: descripcionAncho }}
+      >
         {descripcion}
       </p>
 

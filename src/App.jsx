@@ -24,13 +24,28 @@ import R2PatenteRestaurada from "./screens/reto2/08_PatenteRestaurada";
 import R2OjoAlDato from "./screens/reto2/09_OjoAlDato";
 import R2Galeria from "./screens/reto2/10_Galeria";
 import R2Cierre from "./screens/reto2/11_Cierre";
+import R3Examinar from "./screens/reto3/01_Examinar";
+import R3Clasificar from "./screens/reto3/02_Clasificar";
+import R3Contrastar from "./screens/reto3/03_Contrastar";
+import R3Contextualizar from "./screens/reto3/04_Contextualizar";
+import R3Reparto from "./screens/reto3/05_Reparto";
+import R3Cierre from "./screens/reto3/06_Cierre";
+import R4Introduccion from "./screens/reto4/01_Introduccion";
+import R4Juego from "./screens/reto4/02_Juego";
+import R4Derrota from "./screens/reto4/03_Derrota";
+import R4Victoria from "./screens/reto4/04_Victoria";
 import archivador from "./assets/menu2-archivador.svg";
+import carpetaA from "./assets/menu3-carpeta-a.svg";
+import carpetaB from "./assets/menu3-carpeta-b.svg";
+import caja4 from "./assets/menu4-caja.svg";
 import { MAX_INTENTOS } from "./data/pregunta";
 
 const SCREENS = {
   CARRUSEL: "carrusel",
   MENU: "menu",
   MENU_2: "menu2",
+  MENU_3: "menu3",
+  MENU_4: "menu4",
   // Reto 1 · El cuerpo que no estaba en el modelo
   MISION: "mision",
   EXPEDIENTES: "expedientes",
@@ -56,7 +71,55 @@ const SCREENS = {
   R2_OJO: "r2Ojo",
   R2_GALERIA: "r2Galeria",
   R2_CIERRE: "r2Cierre",
+  // Reto 3 · El trabajo que tenía género
+  R3_EXAMINAR: "r3Examinar",
+  R3_CLASIFICAR: "r3Clasificar",
+  R3_CONTRASTAR: "r3Contrastar",
+  R3_CONTEXTUALIZAR: "r3Contextualizar",
+  R3_REPARTO: "r3Reparto",
+  R3_CIERRE: "r3Cierre",
+  // Reto 4 · La frontera profesional
+  R4_INTRO: "r4Intro",
+  R4_JUEGO: "r4Juego",
+  R4_DERROTA: "r4Derrota",
+  R4_VICTORIA: "r4Victoria",
 };
+
+/* Cada sala coloca su ilustración donde la pone el diseño. */
+const ILUSTRACION_SALA_2 = (
+  <img
+    src={archivador}
+    alt=""
+    aria-hidden="true"
+    className="pointer-events-none absolute left-[20px] top-[83px] block h-[338px] w-[372px] max-w-none"
+  />
+);
+
+const ILUSTRACION_SALA_3 = (
+  <>
+    <img
+      src={carpetaA}
+      alt=""
+      aria-hidden="true"
+      className="pointer-events-none absolute left-[106px] top-[98px] block h-[250.7px] w-[148.7px] max-w-none"
+    />
+    <img
+      src={carpetaB}
+      alt=""
+      aria-hidden="true"
+      className="pointer-events-none absolute left-[158.2px] top-[123.5px] block h-[250.7px] w-[148.8px] max-w-none"
+    />
+  </>
+);
+
+const ILUSTRACION_SALA_4 = (
+  <img
+    src={caja4}
+    alt=""
+    aria-hidden="true"
+    className="pointer-events-none absolute left-[72px] top-[120px] block h-[273px] w-[268px] max-w-none"
+  />
+);
 
 const DESCRIPCION_SALA =
   "Que una decisión de diseño aparentemente neutral puede reproducir una " +
@@ -91,9 +154,14 @@ export default function App() {
   const [resuelta, setResuelta] = useState(false);
   // Reto 2: nombres marcados en la patente de 1928
   const [identificados, setIdentificados] = useState([]);
+  // Reto 4: resultado de la última partida y nº de intento (remonta el juego)
+  const [partida, setPartida] = useState({ puntos: 0, avance: 0, obstaculo: null });
+  const [intento, setIntento] = useState(0);
 
   const irAlArchivo = () => setScreen(SCREENS.MENU);
   const irAlArchivo2 = () => setScreen(SCREENS.MENU_2);
+  const irAlArchivo3 = () => setScreen(SCREENS.MENU_3);
+  const irAlArchivo4 = () => setScreen(SCREENS.MENU_4);
 
   const abrirA = () => {
     setLeidoA(true);
@@ -149,7 +217,7 @@ export default function App() {
           titulo="El conocimiento desde una sola mirada"
           descripcion={DESCRIPCION_SALA}
           onBack={ir(SCREENS.CARRUSEL)}
-          onSalaAnterior={irAlArchivo2}
+          onSalaAnterior={irAlArchivo4}
           onSalaSiguiente={irAlArchivo2}
           onEntrar={ir(SCREENS.MISION)}
         />
@@ -160,11 +228,48 @@ export default function App() {
           sala="Sala 2"
           titulo="Cuando saber no significa, ser escuchada"
           descripcion={DESCRIPCION_SALA}
-          ilustracion={archivador}
+          ilustracion={ILUSTRACION_SALA_2}
           onBack={ir(SCREENS.CARRUSEL)}
           onSalaAnterior={irAlArchivo}
-          onSalaSiguiente={irAlArchivo}
+          onSalaSiguiente={irAlArchivo3}
           onEntrar={ir(SCREENS.R2_MISION)}
+        />
+      )}
+
+      {screen === SCREENS.MENU_3 && (
+        <Menu
+          sala="Sala 3"
+          titulo="El trabajo que tenía género"
+          descripcion={
+            "Las actividades y responsabilidades se distribuyeron según roles " +
+            "de género, creando jerarquías entre el trabajo productivo, técnico " +
+            "y público y el trabajo doméstico, textil y artesanal."
+          }
+          ilustracion={ILUSTRACION_SALA_3}
+          descripcionAncho={319}
+          descripcionTop={611}
+          onBack={ir(SCREENS.CARRUSEL)}
+          onSalaAnterior={irAlArchivo2}
+          onSalaSiguiente={irAlArchivo4}
+          onEntrar={ir(SCREENS.R3_EXAMINAR)}
+        />
+      )}
+
+      {screen === SCREENS.MENU_4 && (
+        <Menu
+          sala="Sala 4"
+          titulo="El lugar que no estaba destinado para ella"
+          descripcion={
+            "Las expectativas de género se traducen en barreras concretas de " +
+            "acceso a áreas, oportunidades, cargos y espacios de decisión."
+          }
+          ilustracion={ILUSTRACION_SALA_4}
+          descripcionAncho={292}
+          descripcionTop={611}
+          onBack={ir(SCREENS.CARRUSEL)}
+          onSalaAnterior={irAlArchivo3}
+          onSalaSiguiente={irAlArchivo}
+          onEntrar={ir(SCREENS.R4_INTRO)}
         />
       )}
 
@@ -360,6 +465,103 @@ export default function App() {
           onHome={irAlArchivo2}
           onBack={ir(SCREENS.R2_GALERIA)}
           onVolver={reiniciar2}
+        />
+      )}
+
+      {/* ---------- Sala 3 ---------- */}
+
+      {screen === SCREENS.R3_EXAMINAR && (
+        <R3Examinar
+          onHome={irAlArchivo3}
+          onBack={irAlArchivo3}
+          onSeguir={ir(SCREENS.R3_CLASIFICAR)}
+        />
+      )}
+
+      {screen === SCREENS.R3_CLASIFICAR && (
+        <R3Clasificar
+          onHome={irAlArchivo3}
+          onBack={ir(SCREENS.R3_EXAMINAR)}
+          onConfirmar={() => setScreen(SCREENS.R3_CONTRASTAR)}
+        />
+      )}
+
+      {screen === SCREENS.R3_CONTRASTAR && (
+        <R3Contrastar
+          onHome={irAlArchivo3}
+          onBack={ir(SCREENS.R3_CLASIFICAR)}
+          onSeguir={ir(SCREENS.R3_CONTEXTUALIZAR)}
+        />
+      )}
+
+      {screen === SCREENS.R3_CONTEXTUALIZAR && (
+        <R3Contextualizar
+          onHome={irAlArchivo3}
+          onBack={ir(SCREENS.R3_CONTRASTAR)}
+          onJugar={ir(SCREENS.R3_REPARTO)}
+        />
+      )}
+
+      {screen === SCREENS.R3_REPARTO && (
+        <R3Reparto
+          onHome={irAlArchivo3}
+          onBack={ir(SCREENS.R3_CONTEXTUALIZAR)}
+          onTerminar={ir(SCREENS.R3_CIERRE)}
+        />
+      )}
+
+      {screen === SCREENS.R3_CIERRE && (
+        <R3Cierre
+          onHome={irAlArchivo3}
+          onBack={ir(SCREENS.R3_REPARTO)}
+          onVolver={irAlArchivo3}
+        />
+      )}
+
+      {/* ---------- Sala 4 ---------- */}
+
+      {screen === SCREENS.R4_INTRO && (
+        <R4Introduccion
+          onHome={irAlArchivo4}
+          onJugar={() => {
+            setIntento((n) => n + 1);
+            setScreen(SCREENS.R4_JUEGO);
+          }}
+        />
+      )}
+
+      {screen === SCREENS.R4_JUEGO && (
+        <R4Juego
+          key={intento}
+          onMenu={irAlArchivo4}
+          onFin={(resultado) => {
+            setPartida(resultado);
+            setScreen(
+              resultado.resultado === "victoria"
+                ? SCREENS.R4_VICTORIA
+                : SCREENS.R4_DERROTA,
+            );
+          }}
+        />
+      )}
+
+      {screen === SCREENS.R4_DERROTA && (
+        <R4Derrota
+          onHome={irAlArchivo4}
+          onMenu={irAlArchivo4}
+          partida={partida}
+          onReintentar={() => {
+            setIntento((n) => n + 1);
+            setScreen(SCREENS.R4_JUEGO);
+          }}
+        />
+      )}
+
+      {screen === SCREENS.R4_VICTORIA && (
+        <R4Victoria
+          onHome={irAlArchivo4}
+          partida={partida}
+          onContinuar={irAlArchivo4}
         />
       )}
     </div>

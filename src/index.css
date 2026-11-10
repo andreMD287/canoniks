@@ -39,6 +39,39 @@ body {
   font-weight: 400;
 }
 
+/*
+ * La ficha que un taller no admite se sacude y vuelve a su sitio
+ * (Reto 3 · el reparto de talleres).
+ */
+@keyframes rechazo {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.animar-rechazo {
+  animation: rechazo 0.45s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animar-rechazo {
+    animation: none;
+  }
+}
+
 /* "Coolvetica Condensed": se estrecha la variante disponible. */
 .font-titular-estrecha {
   font-family: "Coolvetica Condensed", "Coolvetica", "Anton", sans-serif;
