@@ -4,7 +4,7 @@ import ActionButton from "../components/ActionButton";
 import salaExposicion from "../assets/sala-exposicion.png";
 
 /** La pieza ya expuesta en la Sala 1, al final del recorrido. */
-export default function SalaExposicion({ onBack, onVolver }) {
+export default function SalaExposicion({ onHome, onBack, onVolver }) {
   return (
     <ScreenShell
       scroll={false}
@@ -17,7 +17,7 @@ export default function SalaExposicion({ onBack, onVolver }) {
       />
 
       <div className="absolute inset-x-0 top-0 z-10">
-        <TopBar onBack={onBack} />
+        <TopBar onHome={onHome} onBack={onBack} />
       </div>
 
       <div className="absolute left-[48px] top-[698px] h-[70px] w-[316px] rounded-[15px] bg-[var(--negro-principal)] text-[12px] leading-[1.4]">

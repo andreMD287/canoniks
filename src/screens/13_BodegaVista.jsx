@@ -8,7 +8,7 @@ import bodegaVista from "../assets/bodega-vista.png";
  * donde está la pieza. Al pasar el cursor la imagen se acerca un poco y al
  * tocarla da un destello antes de pasar al reto completado.
  */
-export default function BodegaVista({ onBack, onEncontrar }) {
+export default function BodegaVista({ onHome, onBack, onEncontrar }) {
   const [encontrada, setEncontrada] = useState(false);
 
   const confirmar = () => {
@@ -21,7 +21,7 @@ export default function BodegaVista({ onBack, onEncontrar }) {
   return (
     <ScreenShell background="bg-[var(--negro-bodega)]" scroll={false}>
       <div className="absolute inset-x-0 top-0 z-10">
-        <TopBar onBack={onBack} onEye={confirmar} eyeLabel="Marcar la pieza como encontrada" />
+        <TopBar onHome={onHome} onBack={onBack} />
       </div>
 
       <button

@@ -5,7 +5,7 @@ import ActionButton from "../components/ActionButton";
 import folderCorrecta from "../assets/folder-respuesta-correcta.svg";
 import { OPCIONES, OPCION_CORRECTA } from "../data/pregunta";
 
-export default function RespuestaCorrecta({ onBack, onIrALaBodega }) {
+export default function RespuestaCorrecta({ onHome, onBack, onIrALaBodega }) {
   const correcta = OPCIONES.find((o) => o.id === OPCION_CORRECTA);
 
   return (
@@ -19,7 +19,7 @@ export default function RespuestaCorrecta({ onBack, onIrALaBodega }) {
         </>
       }
     >
-      <TopBar onBack={onBack} />
+      <TopBar onHome={onHome} onBack={onBack} />
 
       <div className="px-6 pt-[28px]">
         <p className="text-[11px] font-semibold leading-[1.4] text-[var(--verde-principal)]">

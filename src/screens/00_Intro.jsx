@@ -15,7 +15,7 @@ export default function Intro({ onContinuar }) {
       <button
         type="button"
         onClick={onContinuar}
-        aria-label="Entrar al archivo del museo"
+        aria-label="Continuar a la siguiente lámina"
         className="group absolute inset-0 block text-left"
       >
         <img
@@ -62,7 +62,7 @@ export default function Intro({ onContinuar }) {
         </span>
 
         <span className="pointer-events-none absolute inset-x-0 bottom-[28px] text-center text-[11px] font-semibold tracking-[0.08em] text-[var(--blanco-principal)] opacity-60 transition-opacity duration-500 group-hover:opacity-100">
-          TOCA PARA ENTRAR
+          DESLIZA PARA CONTINUAR
         </span>
       </button>
     </ScreenShell>

@@ -4,7 +4,7 @@ import eyeIcon from "../assets/eye-icon.svg";
 /**
  * Barra superior reutilizada en todas las pantallas (412 × 66 px):
  * botón de volver (izquierda), título "EXPEDIENTE 01" centrado en la pantalla
- * e icono de "vista" (derecha, silueta verde de 48 × 40).
+ * y el ojo (derecha), que siempre lleva al home del archivo.
  *
  * En la pregunta, el botón de la izquierda es una "×" (closeIcon) que
  * intenta salir del reto.
@@ -12,8 +12,7 @@ import eyeIcon from "../assets/eye-icon.svg";
 export default function TopBar({
   title = "EXPEDIENTE 01",
   onBack,
-  onEye,
-  eyeLabel = "Vista general",
+  onHome,
   closeIcon = false,
 }) {
   return (
@@ -39,9 +38,9 @@ export default function TopBar({
 
       <button
         type="button"
-        onClick={onEye}
-        aria-label={eyeLabel}
-        className="absolute right-6 top-[27px] block h-10 w-12"
+        onClick={onHome}
+        aria-label="Ir al archivo"
+        className="absolute right-6 top-[27px] block h-10 w-12 transition-transform duration-300 ease-out hover:scale-110"
       >
         <img src={eyeIcon} alt="" className="block size-full max-w-none" />
       </button>

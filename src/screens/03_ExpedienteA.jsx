@@ -6,10 +6,10 @@ import DatoCard from "../components/DatoCard";
 import folderA1de2 from "../assets/folder-expediente-a-1de2.svg";
 import tablaAntropometrica from "../assets/tabla-antropometrica.png";
 
-export default function ExpedienteA({ onBack, onLeerExpedienteB }) {
+export default function ExpedienteA({ onHome, onBack, onLeerExpedienteB }) {
   return (
     <ScreenShell>
-      <TopBar onBack={onBack} />
+      <TopBar onHome={onHome} onBack={onBack} />
 
       <div className="px-6 pt-[28px]">
         <p className="text-[11px] font-semibold leading-[1.4] text-[var(--verde-principal)]">

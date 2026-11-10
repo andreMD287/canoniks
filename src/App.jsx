@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Intro from "./screens/00_Intro";
-import Start from "./screens/00_Start";
+import Carrusel from "./screens/00_Carrusel";
+import Menu from "./screens/00_Menu";
 import MisionDelReto from "./screens/01_MisionDelReto";
 import Expedientes from "./screens/02_Expedientes";
 import ExpedienteA from "./screens/03_ExpedienteA";
@@ -13,11 +13,13 @@ import Bodega from "./screens/13_Bodega";
 import BodegaVista from "./screens/13_BodegaVista";
 import RetoCompletado from "./screens/14_RetoCompletado";
 import SalaExposicion from "./screens/15_SalaExposicion";
+import archivador from "./assets/menu2-archivador.svg";
 import { MAX_INTENTOS } from "./data/pregunta";
 
 const SCREENS = {
-  INTRO: "intro",
-  START: "start",
+  CARRUSEL: "carrusel",
+  MENU: "menu",
+  MENU_2: "menu2",
   MISION: "mision",
   EXPEDIENTES: "expedientes",
   EXPEDIENTE_A: "expedienteA",
@@ -32,24 +34,32 @@ const SCREENS = {
   SALA: "sala",
 };
 
+const DESCRIPCION_SALA =
+  "Que una decisión de diseño aparentemente neutral puede reproducir una " +
+  "perspectiva particular cuando se convierte en estándar para todas las personas.";
+
 /**
  * Flujo del Expediente 01:
- *  intro → start → 01 Misión → 02 Expedientes → 03 A / 04 B (hay que abrir
- *  los dos) → 05 Comparar → 06-10 Pregunta (3 intentos; sólo se avanza
- *  acertando)
+ *  carrusel (fachada + qué podrás hacer) → menu (el archivo, una sala por
+ *  pantalla) → 01 Misión → 02 Expedientes → 03 A / 04 B (hay que abrir los
+ *  dos) → 05 Comparar → 06-10 Pregunta (3 intentos; sólo se avanza acertando)
  *     · acierta  → 12 Respuesta correcta → 13 Encuentra la escultura
  *                  → 13 Bodega (se toca la foto) → 14 Reto completado
  *                  → 15 Sala 1
  *     · 3 fallos → 11 Sin intentos → salir al archivo (el reto no se completa)
- *  "Salir al archivo" / "Volver al archivo" reinician el recorrido.
+ *
+ * El ojo de la barra superior vuelve al archivo (el menu) desde cualquier
+ * pantalla. La Sala 2 ya tiene su portada, pero su reto está por implementar.
  */
 export default function App() {
-  const [screen, setScreen] = useState(SCREENS.INTRO);
+  const [screen, setScreen] = useState(SCREENS.CARRUSEL);
   const [leidoA, setLeidoA] = useState(false);
   const [leidoB, setLeidoB] = useState(false);
   const [volverDeB, setVolverDeB] = useState(SCREENS.EXPEDIENTES);
   const [intentosUsados, setIntentosUsados] = useState(0);
   const [resuelta, setResuelta] = useState(false);
+
+  const irAlArchivo = () => setScreen(SCREENS.MENU);
 
   const abrirA = () => {
     setLeidoA(true);
@@ -77,34 +87,61 @@ export default function App() {
     setScreen(SCREENS.CORRECTA);
   };
 
+  // "Salir al archivo" / "Volver al archivo": deja el reto como nuevo.
   const reiniciar = () => {
     setLeidoA(false);
     setLeidoB(false);
     setVolverDeB(SCREENS.EXPEDIENTES);
     setIntentosUsados(0);
     setResuelta(false);
-    setScreen(SCREENS.INTRO);
+    setScreen(SCREENS.MENU);
   };
+
+  const home = { onHome: irAlArchivo };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#0b0b14] py-10">
-      {screen === SCREENS.INTRO && (
-        <Intro onContinuar={() => setScreen(SCREENS.START)} />
+      {screen === SCREENS.CARRUSEL && (
+        <Carrusel onExplorar={irAlArchivo} />
       )}
 
-      {screen === SCREENS.START && (
-        <Start onExplorar={() => setScreen(SCREENS.MISION)} />
+      {screen === SCREENS.MENU && (
+        <Menu
+          sala="Sala 1"
+          titulo="El conocimiento desde una sola mirada"
+          descripcion={DESCRIPCION_SALA}
+          onBack={() => setScreen(SCREENS.CARRUSEL)}
+          onSalaAnterior={() => setScreen(SCREENS.MENU_2)}
+          onSalaSiguiente={() => setScreen(SCREENS.MENU_2)}
+          onEntrar={() => setScreen(SCREENS.MISION)}
+        />
+      )}
+
+      {screen === SCREENS.MENU_2 && (
+        <Menu
+          sala="Sala 2"
+          titulo="Cuando saber no significa, ser escuchada"
+          descripcion={DESCRIPCION_SALA}
+          ilustracion={archivador}
+          disponible={false}
+          onBack={() => setScreen(SCREENS.CARRUSEL)}
+          onSalaAnterior={irAlArchivo}
+          onSalaSiguiente={irAlArchivo}
+          onEntrar={() => {}}
+        />
       )}
 
       {screen === SCREENS.MISION && (
         <MisionDelReto
-          onBack={() => setScreen(SCREENS.START)}
+          {...home}
+          onBack={irAlArchivo}
           onOpenExpediente={() => setScreen(SCREENS.EXPEDIENTES)}
         />
       )}
 
       {screen === SCREENS.EXPEDIENTES && (
         <Expedientes
+          {...home}
           onBack={() => setScreen(SCREENS.MISION)}
           onOpenA={abrirA}
           onOpenB={() => abrirB(SCREENS.EXPEDIENTES)}
@@ -116,6 +153,7 @@ export default function App() {
 
       {screen === SCREENS.EXPEDIENTE_A && (
         <ExpedienteA
+          {...home}
           onBack={() => setScreen(SCREENS.EXPEDIENTES)}
           onLeerExpedienteB={() => abrirB(SCREENS.EXPEDIENTE_A)}
         />
@@ -123,6 +161,7 @@ export default function App() {
 
       {screen === SCREENS.EXPEDIENTE_B && (
         <ExpedienteB
+          {...home}
           onBack={() => setScreen(volverDeB)}
           onComparar={() => setScreen(SCREENS.COMPARAR)}
           puedeComparar={leidoA}
@@ -131,6 +170,7 @@ export default function App() {
 
       {screen === SCREENS.COMPARAR && (
         <Comparar
+          {...home}
           onBack={() => setScreen(SCREENS.EXPEDIENTES)}
           onIrALaPregunta={irALaPregunta}
         />
@@ -138,16 +178,20 @@ export default function App() {
 
       {screen === SCREENS.PREGUNTA && (
         <Pregunta
+          {...home}
           intentosUsados={intentosUsados}
           onFallar={fallar}
           onAcertar={acertar}
         />
       )}
 
-      {screen === SCREENS.SIN_INTENTOS && <SinIntentos onSalir={reiniciar} />}
+      {screen === SCREENS.SIN_INTENTOS && (
+        <SinIntentos {...home} onSalir={reiniciar} />
+      )}
 
       {screen === SCREENS.CORRECTA && (
         <RespuestaCorrecta
+          {...home}
           onBack={() => setScreen(SCREENS.COMPARAR)}
           onIrALaBodega={() => setScreen(SCREENS.BODEGA)}
         />
@@ -155,6 +199,7 @@ export default function App() {
 
       {screen === SCREENS.BODEGA && (
         <Bodega
+          {...home}
           onBack={() => setScreen(SCREENS.CORRECTA)}
           onEntrarALaBodega={() => setScreen(SCREENS.BODEGA_VISTA)}
         />
@@ -162,6 +207,7 @@ export default function App() {
 
       {screen === SCREENS.BODEGA_VISTA && (
         <BodegaVista
+          {...home}
           onBack={() => setScreen(SCREENS.BODEGA)}
           onEncontrar={() => setScreen(SCREENS.COMPLETADO)}
         />
@@ -169,6 +215,7 @@ export default function App() {
 
       {screen === SCREENS.COMPLETADO && (
         <RetoCompletado
+          {...home}
           onBack={() => setScreen(SCREENS.BODEGA_VISTA)}
           onVerLaSala={() => setScreen(SCREENS.SALA)}
         />
@@ -176,6 +223,7 @@ export default function App() {
 
       {screen === SCREENS.SALA && (
         <SalaExposicion
+          {...home}
           onBack={() => setScreen(SCREENS.COMPLETADO)}
           onVolver={reiniciar}
         />

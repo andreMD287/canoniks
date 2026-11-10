@@ -8,7 +8,7 @@ import estrellaBodega from "../assets/estrella-bodega.svg";
  * Se desbloquea al acertar la pregunta. "Confirmar hallazgo" entra a la
  * bodega, donde hay que localizar la pieza.
  */
-export default function Bodega({ onBack, onEntrarALaBodega }) {
+export default function Bodega({ onHome, onBack, onEntrarALaBodega }) {
   return (
     <ScreenShell
       background="bg-[var(--negro-bodega)]"
@@ -16,7 +16,7 @@ export default function Bodega({ onBack, onEntrarALaBodega }) {
         <ActionButton onClick={onEntrarALaBodega}>Confirmar hallazgo&nbsp; →</ActionButton>
       }
     >
-      <TopBar onBack={onBack} onEye={onEntrarALaBodega} eyeLabel="Entrar a la bodega" />
+      <TopBar onHome={onHome} onBack={onBack} />
 
       <div className="px-6 pt-[28px]">
         <p className="text-[11px] font-semibold leading-[1.4] text-[var(--verde-principal)]">

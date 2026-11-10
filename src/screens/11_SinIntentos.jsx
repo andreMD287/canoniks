@@ -8,7 +8,7 @@ import folderSinIntentos from "../assets/folder-sin-intentos.svg";
  * Se llega aquí al fallar el tercer intento. No hay desbloqueo ni recompensa:
  * la única salida es volver al archivo (el reto no queda completado).
  */
-export default function SinIntentos({ onSalir }) {
+export default function SinIntentos({ onHome, onSalir }) {
   return (
     <ScreenShell
       footer={
@@ -20,7 +20,7 @@ export default function SinIntentos({ onSalir }) {
         </>
       }
     >
-      <TopBar onBack={onSalir} />
+      <TopBar onHome={onHome} onBack={onSalir} />
 
       <div className="px-6 pt-[28px]">
         <p className="text-[11px] font-semibold leading-[1.4] text-[var(--verde-principal)]">

@@ -86,7 +86,7 @@ function Opcion({ id, texto, estado, deshabilitada, onClick }) {
  *  - diálogo de salida (10): la "×" no deja salir, sólo recuerda cuántos intentos quedan.
  * Acertar o agotar los intentos lo decide el padre (App) con onAcertar / onFallar.
  */
-export default function Pregunta({ intentosUsados, onFallar, onAcertar }) {
+export default function Pregunta({ onHome, intentosUsados, onFallar, onAcertar }) {
   const [seleccion, setSeleccion] = useState(null);
   const [fase, setFase] = useState("eligiendo"); // "eligiendo" | "incorrecta"
   const [salirAbierto, setSalirAbierto] = useState(false);
@@ -173,7 +173,7 @@ export default function Pregunta({ intentosUsados, onFallar, onAcertar }) {
 
   return (
     <ScreenShell footer={footer} overlay={dialogoSalida}>
-      <TopBar closeIcon onBack={() => setSalirAbierto(true)} />
+      <TopBar closeIcon onHome={onHome} onBack={() => setSalirAbierto(true)} />
 
       <div className="px-6 pt-[28px]">
         <p className="text-[11px] font-semibold leading-[1.4] text-[var(--verde-principal)]">

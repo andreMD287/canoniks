@@ -5,12 +5,12 @@ import folderCompletado from "../assets/folder-completado.svg";
 import estrellaCompletado from "../assets/estrella-completado.svg";
 import auricularVr from "../assets/auricular-vr.png";
 
-export default function RetoCompletado({ onBack, onVerLaSala }) {
+export default function RetoCompletado({ onHome, onBack, onVerLaSala }) {
   return (
     <ScreenShell
       footer={<ActionButton onClick={onVerLaSala}>Ver la SALA 1&nbsp; →</ActionButton>}
     >
-      <TopBar onBack={onBack} />
+      <TopBar onHome={onHome} onBack={onBack} />
 
       <div className="px-6 pt-[28px]">
         <p className="text-[11px] font-semibold leading-[1.4] text-[var(--verde-principal)]">

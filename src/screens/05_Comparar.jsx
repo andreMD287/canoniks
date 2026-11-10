@@ -5,12 +5,12 @@ import ActionButton from "../components/ActionButton";
 import folderA from "../assets/folder-comparar-a.svg";
 import folderB from "../assets/folder-comparar-b.svg";
 
-export default function Comparar({ onBack, onIrALaPregunta }) {
+export default function Comparar({ onHome, onBack, onIrALaPregunta }) {
   return (
     <ScreenShell
       footer={<ActionButton onClick={onIrALaPregunta}>Ir a la pregunta&nbsp; →</ActionButton>}
     >
-      <TopBar onBack={onBack} />
+      <TopBar onHome={onHome} onBack={onBack} />
 
       <div className="px-6 pt-[28px]">
         <p className="text-[11px] font-semibold leading-[1.4] text-[var(--verde-principal)]">

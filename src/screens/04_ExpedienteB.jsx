@@ -9,10 +9,10 @@ import folderB2de2 from "../assets/folder-expediente-b-2de2.svg";
  * `puedeComparar` es falso si el visitante llegó directo al expediente B sin
  * haber abierto el A: primero hay que leer ambas evidencias.
  */
-export default function ExpedienteB({ onBack, onComparar, puedeComparar = true }) {
+export default function ExpedienteB({ onHome, onBack, onComparar, puedeComparar = true }) {
   return (
     <ScreenShell>
-      <TopBar onBack={onBack} />
+      <TopBar onHome={onHome} onBack={onBack} />
 
       <div className="px-6 pt-[28px]">
         <p className="text-[11px] font-semibold leading-[1.4] text-[var(--verde-principal)]">

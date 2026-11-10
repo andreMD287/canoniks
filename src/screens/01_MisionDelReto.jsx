@@ -4,10 +4,10 @@ import FolderCard from "../components/FolderCard";
 import ActionButton from "../components/ActionButton";
 import folderMision from "../assets/folder-mision.svg";
 
-export default function MisionDelReto({ onBack, onOpenExpediente }) {
+export default function MisionDelReto({ onHome, onBack, onOpenExpediente }) {
   return (
     <ScreenShell>
-      <TopBar onBack={onBack} />
+      <TopBar onHome={onHome} onBack={onBack} />
 
       <div className="px-6 pt-[28px]">
         <p className="text-[11px] font-semibold leading-[1.4] text-[var(--verde-principal)]">

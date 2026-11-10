@@ -7,9 +7,18 @@ import folderB from "../assets/folder-expediente-b.svg";
 
 /**
  * "Lee ambas evidencias antes de responder": el botón de comparar sólo se
- * activa cuando se abrieron los dos expedientes.
+ * activa cuando se abrieron los dos expedientes. Cada carpeta entera es el
+ * botón que abre su evidencia.
  */
-export default function Expedientes({ onBack, onOpenA, onOpenB, onComparar, leidoA, leidoB }) {
+export default function Expedientes({
+  onBack,
+  onHome,
+  onOpenA,
+  onOpenB,
+  onComparar,
+  leidoA,
+  leidoB,
+}) {
   const puedeComparar = leidoA && leidoB;
 
   let pendiente = null;
@@ -32,7 +41,7 @@ export default function Expedientes({ onBack, onOpenA, onOpenB, onComparar, leid
         </>
       }
     >
-      <TopBar onBack={onBack} />
+      <TopBar onBack={onBack} onHome={onHome} />
 
       <div className="px-6 pt-[28px]">
         <p className="text-[11px] font-semibold leading-[1.4] text-[var(--verde-principal)]">
@@ -51,6 +60,8 @@ export default function Expedientes({ onBack, onOpenA, onOpenB, onComparar, leid
 
         <FolderCard
           asset={folderA}
+          onClick={onOpenA}
+          label="Abrir el expediente A, El estándar"
           className="mt-[39px] min-h-[229px]"
           contentClassName="pt-[66px] pb-4"
         >
@@ -63,17 +74,15 @@ export default function Expedientes({ onBack, onOpenA, onOpenB, onComparar, leid
           <p className="mt-[17px] text-[15px] leading-[1.4] text-[var(--blanco-principal)]">
             Los criterios que definieron la norma.
           </p>
-          <button
-            type="button"
-            onClick={onOpenA}
-            className="mt-[24px] block text-[13px] font-semibold leading-[1.4] text-[var(--blanco-principal)]"
-          >
+          <span className="mt-[24px] block text-[13px] font-semibold leading-[1.4] text-[var(--blanco-principal)]">
             Abrir evidencia&nbsp; ↗
-          </button>
+          </span>
         </FolderCard>
 
         <FolderCard
           asset={folderB}
+          onClick={onOpenB}
+          label="Abrir el expediente B, Los cuerpos omitidos"
           className="mt-[19px] min-h-[229px]"
           contentClassName="pt-[66px] pb-4"
         >
@@ -86,13 +95,9 @@ export default function Expedientes({ onBack, onOpenA, onOpenB, onComparar, leid
           <p className="mt-[18px] text-[15px] leading-[1.4] text-[var(--negro-principal)]">
             Las experiencias que quedaron fuera.
           </p>
-          <button
-            type="button"
-            onClick={onOpenB}
-            className="mt-[24px] block text-[13px] font-semibold leading-[1.4] text-[var(--negro-principal)]"
-          >
+          <span className="mt-[24px] block text-[13px] font-semibold leading-[1.4] text-[var(--negro-principal)]">
             Abrir evidencia&nbsp; ↗
-          </button>
+          </span>
         </FolderCard>
       </div>
     </ScreenShell>
