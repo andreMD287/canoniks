@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Alexandria:wght@400;600;700&family=Anton&family=Sora:wght@700;800&display=swap");
+@import "tailwindcss";
+
+:root {
+  --azul-oscuro: #00215e;
+  --verde-principal: #aef200;
+  --blanco-principal: #f2effb;
+  --negro-principal: #070707;
+  --morado: #7a1fa2;
+  --morado-principal: #940eb5;
+  --negro-bodega: #010400;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0b0b14;
+  font-family: "Alexandria", sans-serif;
+  color: var(--blanco-principal);
+}
+
+/* Títulos de las pantallas del expediente. */
+.font-display {
+  font-family: "Sora", sans-serif;
+}
+
+/*
+ * Titulares de la intro y del start. El diseño usa Coolvetica, que no está en
+ * Google Fonts: si está instalada en el equipo se usa esa, si no cae en Anton
+ * (Google Fonts), la condensada pesada más parecida.
+ */
+.font-titular {
+  font-family: "Coolvetica", "Anton", sans-serif;
+  font-weight: 400;
+}
+
+/* "Coolvetica Condensed": se estrecha la variante disponible. */
+.font-titular-estrecha {
+  font-family: "Coolvetica Condensed", "Coolvetica", "Anton", sans-serif;
+  font-weight: 400;
+  transform: scaleX(0.92);
+  transform-origin: left center;
+}
