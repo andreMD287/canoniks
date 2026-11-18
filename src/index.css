@@ -15,6 +15,28 @@ html,
 body,
 #root {
   height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* Toda pantalla entra con un fundido corto. */
+@keyframes entrada-pantalla {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animar-entrada {
+  animation: entrada-pantalla 0.5s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animar-entrada {
+    animation: none;
+  }
 }
 
 body {

@@ -17,7 +17,7 @@ export default function ScreenShell({
 }) {
   return (
     <div
-      className={`relative mx-auto h-[917px] w-[412px] overflow-hidden ${background} ${className}`}
+      className={`animar-entrada relative mx-auto h-[917px] w-[412px] overflow-hidden ${background} ${className}`}
     >
       {scroll ? (
         <div

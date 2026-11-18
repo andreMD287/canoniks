@@ -26,12 +26,12 @@ export default function Bodega({ onHome, onBack, onEntrarALaBodega }) {
         <h1 className="font-display mt-[23px] text-[38px] font-extrabold leading-[1.12] text-[var(--verde-principal)]">
           Encuentra
           <br />
-          la escultura.
+          las gafas.
         </h1>
 
         <p className="mt-[14px] text-[15px] leading-[1.4] text-[var(--blanco-principal)]">
-          Explora la bodega y localiza la pieza para la sala «El conocimiento
-          desde una sola mirada».
+          Explora la bodega y localiza las gafas de realidad virtual para la
+          sala «El conocimiento desde una sola mirada».
         </p>
       </div>
 

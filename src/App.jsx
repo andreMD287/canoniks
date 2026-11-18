@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Carrusel from "./screens/00_Carrusel";
 import Menu from "./screens/00_Menu";
 import MisionDelReto from "./screens/01_MisionDelReto";
@@ -34,18 +34,14 @@ import R4Introduccion from "./screens/reto4/01_Introduccion";
 import R4Juego from "./screens/reto4/02_Juego";
 import R4Derrota from "./screens/reto4/03_Derrota";
 import R4Victoria from "./screens/reto4/04_Victoria";
-import archivador from "./assets/menu2-archivador.svg";
 import carpetaA from "./assets/menu3-carpeta-a.svg";
 import carpetaB from "./assets/menu3-carpeta-b.svg";
-import caja4 from "./assets/menu4-caja.svg";
 import { MAX_INTENTOS } from "./data/pregunta";
+import { SALAS } from "./data/salas";
 
 const SCREENS = {
   CARRUSEL: "carrusel",
   MENU: "menu",
-  MENU_2: "menu2",
-  MENU_3: "menu3",
-  MENU_4: "menu4",
   // Reto 1 · El cuerpo que no estaba en el modelo
   MISION: "mision",
   EXPEDIENTES: "expedientes",
@@ -85,16 +81,38 @@ const SCREENS = {
   R4_VICTORIA: "r4Victoria",
 };
 
-/* Cada sala coloca su ilustración donde la pone el diseño. */
-const ILUSTRACION_SALA_2 = (
-  <img
-    src={archivador}
-    alt=""
-    aria-hidden="true"
-    className="pointer-events-none absolute left-[20px] top-[83px] block h-[338px] w-[372px] max-w-none"
-  />
-);
+const ANCHO_DISENO = 412;
+const ALTO_DISENO = 917;
 
+const calcularEscala = () =>
+  Math.min(
+    window.innerWidth / ANCHO_DISENO,
+    window.innerHeight / ALTO_DISENO,
+    1.5,
+  );
+
+/**
+ * El diseño es de 412 × 917. En vez de dejar que se desborde (y que la página
+ * se mueva al deslizar), se escala entero para que quepa en la ventana
+ * conservando la proporción.
+ */
+function useEscala() {
+  const [escala, setEscala] = useState(calcularEscala);
+
+  useEffect(() => {
+    const actualizar = () => setEscala(calcularEscala());
+    window.addEventListener("resize", actualizar);
+    window.visualViewport?.addEventListener("resize", actualizar);
+    return () => {
+      window.removeEventListener("resize", actualizar);
+      window.visualViewport?.removeEventListener("resize", actualizar);
+    };
+  }, []);
+
+  return escala;
+}
+
+/* La Sala 3 aún no tiene foto de fondo: lleva sus carpetas como ilustración. */
 const ILUSTRACION_SALA_3 = (
   <>
     <img
@@ -111,19 +129,6 @@ const ILUSTRACION_SALA_3 = (
     />
   </>
 );
-
-const ILUSTRACION_SALA_4 = (
-  <img
-    src={caja4}
-    alt=""
-    aria-hidden="true"
-    className="pointer-events-none absolute left-[72px] top-[120px] block h-[273px] w-[268px] max-w-none"
-  />
-);
-
-const DESCRIPCION_SALA =
-  "Que una decisión de diseño aparentemente neutral puede reproducir una " +
-  "perspectiva particular cuando se convierte en estándar para todas las personas.";
 
 /**
  * Archivo del Museo de las Ausencias.
@@ -145,7 +150,10 @@ const DESCRIPCION_SALA =
  * El ojo de la barra superior vuelve al archivo desde cualquier pantalla.
  */
 export default function App() {
+  const escala = useEscala();
   const [screen, setScreen] = useState(SCREENS.CARRUSEL);
+  // sala que muestra el menú del archivo (índice en SALAS)
+  const [salaActual, setSalaActual] = useState(0);
   // Reto 1
   const [leidoA, setLeidoA] = useState(false);
   const [leidoB, setLeidoB] = useState(false);
@@ -158,10 +166,16 @@ export default function App() {
   const [partida, setPartida] = useState({ puntos: 0, avance: 0, obstaculo: null });
   const [intento, setIntento] = useState(0);
 
-  const irAlArchivo = () => setScreen(SCREENS.MENU);
-  const irAlArchivo2 = () => setScreen(SCREENS.MENU_2);
-  const irAlArchivo3 = () => setScreen(SCREENS.MENU_3);
-  const irAlArchivo4 = () => setScreen(SCREENS.MENU_4);
+  const irASala = (indice) => () => {
+    setSalaActual(indice);
+    setScreen(SCREENS.MENU);
+  };
+  const irAlArchivo = irASala(0);
+  const irAlArchivo2 = irASala(1);
+  const irAlArchivo3 = irASala(2);
+  const irAlArchivo4 = irASala(3);
+  const cambiarSala = (paso) => () =>
+    setSalaActual((i) => (i + paso + SALAS.length) % SALAS.length);
 
   const abrirA = () => {
     setLeidoA(true);
@@ -196,80 +210,43 @@ export default function App() {
     setVolverDeB(SCREENS.EXPEDIENTES);
     setIntentosUsados(0);
     setResuelta(false);
-    setScreen(SCREENS.MENU);
+    irAlArchivo();
   };
 
   const reiniciar2 = () => {
     setIdentificados([]);
-    setScreen(SCREENS.MENU_2);
+    irAlArchivo2();
   };
 
   const home = { onHome: irAlArchivo };
   const ir = (destino) => () => setScreen(destino);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0b0b14] py-10">
+    <div className="fixed inset-0 flex items-center justify-center overflow-hidden bg-[#0b0b14]">
+      <div
+        className="relative shrink-0 overflow-hidden"
+        style={{ width: ANCHO_DISENO * escala, height: ALTO_DISENO * escala }}
+      >
+        <div
+          className="absolute left-0 top-0 origin-top-left"
+          style={{
+            width: ANCHO_DISENO,
+            height: ALTO_DISENO,
+            transform: `scale(${escala})`,
+          }}
+        >
       {screen === SCREENS.CARRUSEL && <Carrusel onExplorar={irAlArchivo} />}
 
       {screen === SCREENS.MENU && (
         <Menu
-          sala="Sala 1"
-          titulo="El conocimiento desde una sola mirada"
-          descripcion={DESCRIPCION_SALA}
+          key={salaActual}
+          {...SALAS[salaActual]}
+          ilustracion={salaActual === 2 ? ILUSTRACION_SALA_3 : undefined}
+          disponible={SALAS[salaActual].reto !== null}
           onBack={ir(SCREENS.CARRUSEL)}
-          onSalaAnterior={irAlArchivo4}
-          onSalaSiguiente={irAlArchivo2}
-          onEntrar={ir(SCREENS.MISION)}
-        />
-      )}
-
-      {screen === SCREENS.MENU_2 && (
-        <Menu
-          sala="Sala 2"
-          titulo="Cuando saber no significa, ser escuchada"
-          descripcion={DESCRIPCION_SALA}
-          ilustracion={ILUSTRACION_SALA_2}
-          onBack={ir(SCREENS.CARRUSEL)}
-          onSalaAnterior={irAlArchivo}
-          onSalaSiguiente={irAlArchivo3}
-          onEntrar={ir(SCREENS.R2_MISION)}
-        />
-      )}
-
-      {screen === SCREENS.MENU_3 && (
-        <Menu
-          sala="Sala 3"
-          titulo="El trabajo que tenía género"
-          descripcion={
-            "Las actividades y responsabilidades se distribuyeron según roles " +
-            "de género, creando jerarquías entre el trabajo productivo, técnico " +
-            "y público y el trabajo doméstico, textil y artesanal."
-          }
-          ilustracion={ILUSTRACION_SALA_3}
-          descripcionAncho={319}
-          descripcionTop={611}
-          onBack={ir(SCREENS.CARRUSEL)}
-          onSalaAnterior={irAlArchivo2}
-          onSalaSiguiente={irAlArchivo4}
-          onEntrar={ir(SCREENS.R3_EXAMINAR)}
-        />
-      )}
-
-      {screen === SCREENS.MENU_4 && (
-        <Menu
-          sala="Sala 4"
-          titulo="El lugar que no estaba destinado para ella"
-          descripcion={
-            "Las expectativas de género se traducen en barreras concretas de " +
-            "acceso a áreas, oportunidades, cargos y espacios de decisión."
-          }
-          ilustracion={ILUSTRACION_SALA_4}
-          descripcionAncho={292}
-          descripcionTop={611}
-          onBack={ir(SCREENS.CARRUSEL)}
-          onSalaAnterior={irAlArchivo3}
-          onSalaSiguiente={irAlArchivo}
-          onEntrar={ir(SCREENS.R4_INTRO)}
+          onSalaAnterior={cambiarSala(-1)}
+          onSalaSiguiente={cambiarSala(1)}
+          onEntrar={() => setScreen(SALAS[salaActual].reto)}
         />
       )}
 
@@ -564,6 +541,8 @@ export default function App() {
           onContinuar={irAlArchivo4}
         />
       )}
+        </div>
+      </div>
     </div>
   );
 }

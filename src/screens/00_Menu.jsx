@@ -4,21 +4,21 @@ import flecha from "../assets/menu-flecha.svg";
 import ojo from "../assets/menu-ojo.svg";
 import alaIzq from "../assets/menu-ala-izq.svg";
 import alaDer from "../assets/menu-ala-der.svg";
-import chevron1 from "../assets/menu-chevron-1.svg";
-import chevron2 from "../assets/menu-chevron-2.svg";
-import chevron3 from "../assets/menu-chevron-3.svg";
+import ojoGrande from "../assets/menu-ojo-grande.svg";
 
 /**
  * El home del archivo: una sala por pantalla. Las alas verdes de los lados
  * cambian de sala y el indicador de abajo entra al expediente.
  *
- * `ilustracion` es opcional y se pinta tal cual: cada sala coloca sus propias
- * imágenes en la posición que marca el diseño.
+ * `fondo` es la foto de la sala ({ src, left, ancho }, tal como la coloca el
+ * diseño). `ilustracion` es opcional y se pinta encima por si una sala aún no
+ * tiene foto.
  */
 export default function Menu({
   sala,
   titulo,
   descripcion,
+  fondo,
   ilustracion,
   // la Sala 3 lleva la descripción algo más estrecha y más abajo
   descripcionAncho = 354,
@@ -58,9 +58,19 @@ export default function Menu({
         className="pointer-events-none absolute left-[337px] top-[27px] block h-[48px] w-[57.15px] max-w-none"
       />
 
+      {fondo && (
+        <img
+          src={fondo.src}
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute top-0 block h-[917px] max-w-none object-cover"
+          style={{ left: fondo.left, width: fondo.ancho }}
+        />
+      )}
+
       {ilustracion}
 
-      <p className="absolute left-[155.5px] top-[415px] -translate-y-1/2 whitespace-nowrap text-[35.876px] font-semibold text-white">
+      <p className="absolute left-1/2 top-[415px] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[35.876px] font-semibold text-white">
         {sala}
       </p>
 
@@ -110,35 +120,20 @@ export default function Menu({
         />
       </button>
 
-      {/* Indicador de "desliza" que entra al expediente */}
+      {/* El ojo grande entra al expediente */}
       <button
         type="button"
         onClick={entrar}
         aria-label={`Entrar al expediente de ${sala}`}
-        className="group absolute left-1/2 top-[699px] flex h-[235px] w-[198px] -translate-x-1/2 flex-col items-center"
+        className="group absolute left-1/2 top-[769px] flex h-[90px] w-[198px] -translate-x-1/2 flex-col items-center gap-[17px]"
       >
-        <span className="relative block h-[134.534px] w-[55.807px] shrink-0 rounded-[39.862px] bg-white shadow-[0px_7.972px_15.945px_0px_rgba(255,255,255,0.3)]">
-          <img
-            src={chevron3}
-            alt=""
-            className="absolute left-[11.96px] top-[2.99px] block size-[31.89px] max-w-none transition-transform duration-300 ease-out group-hover:-translate-y-1"
-          />
-          <img
-            src={chevron2}
-            alt=""
-            className="absolute left-[11.96px] top-[26.91px] block size-[31.89px] max-w-none transition-transform duration-300 ease-out group-hover:-translate-y-1"
-          />
-          <img
-            src={chevron1}
-            alt=""
-            className="absolute left-[11.96px] top-[50.82px] block size-[31.89px] max-w-none transition-transform duration-300 ease-out group-hover:-translate-y-1"
-          />
-        </span>
-
-        <img src={ojo} alt="" className="block h-[48px] w-[57.15px] shrink-0 max-w-none" />
-
+        <img
+          src={ojoGrande}
+          alt=""
+          className="block h-[72px] w-[85.725px] shrink-0 max-w-none transition-transform duration-300 ease-out group-hover:scale-110"
+        />
         <span className="block shrink-0 whitespace-nowrap text-[15.945px] font-medium leading-[1.4] text-white">
-          Desliza para ir al expediente
+          Has click para ir al expediente
         </span>
       </button>
 
