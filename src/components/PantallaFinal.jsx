@@ -7,7 +7,7 @@ import ScreenShell from "./ScreenShell";
  */
 export default function PantallaFinal({ imagen, alt, onHome, onBack, onVolver }) {
   return (
-    <ScreenShell scroll={false}>
+    <ScreenShell scroll={false} background="bg-[var(--negro-principal)]">
       <img
         src={imagen}
         alt={alt}

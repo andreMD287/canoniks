@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Carrusel from "./screens/00_Carrusel";
 import Menu from "./screens/00_Menu";
 import MisionDelReto from "./screens/01_MisionDelReto";
@@ -96,37 +96,6 @@ const SCREENS = {
   R10: "r10Juego",
 };
 
-const ANCHO_DISENO = 412;
-const ALTO_DISENO = 917;
-
-const calcularEscala = () =>
-  Math.min(
-    window.innerWidth / ANCHO_DISENO,
-    window.innerHeight / ALTO_DISENO,
-    1.5,
-  );
-
-/**
- * El diseño es de 412 × 917. En vez de dejar que se desborde (y que la página
- * se mueva al deslizar), se escala entero para que quepa en la ventana
- * conservando la proporción.
- */
-function useEscala() {
-  const [escala, setEscala] = useState(calcularEscala);
-
-  useEffect(() => {
-    const actualizar = () => setEscala(calcularEscala());
-    window.addEventListener("resize", actualizar);
-    window.visualViewport?.addEventListener("resize", actualizar);
-    return () => {
-      window.removeEventListener("resize", actualizar);
-      window.visualViewport?.removeEventListener("resize", actualizar);
-    };
-  }, []);
-
-  return escala;
-}
-
 /**
  * Archivo del Museo de las Ausencias.
  *
@@ -147,7 +116,6 @@ function useEscala() {
  * El ojo de la barra superior vuelve al archivo desde cualquier pantalla.
  */
 export default function App() {
-  const escala = useEscala();
   const [screen, setScreen] = useState(SCREENS.CARRUSEL);
   // sala que muestra el menú del archivo (índice en SALAS)
   const [salaActual, setSalaActual] = useState(0);
@@ -234,19 +202,7 @@ export default function App() {
   const ir = (destino) => () => setScreen(destino);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center overflow-hidden bg-[#0b0b14]">
-      <div
-        className="relative shrink-0 overflow-hidden"
-        style={{ width: ANCHO_DISENO * escala, height: ALTO_DISENO * escala }}
-      >
-        <div
-          className="absolute left-0 top-0 origin-top-left"
-          style={{
-            width: ANCHO_DISENO,
-            height: ALTO_DISENO,
-            transform: `scale(${escala})`,
-          }}
-        >
+    <>
       {screen === SCREENS.CARRUSEL && <Carrusel onExplorar={irAlArchivo} />}
 
       {screen === SCREENS.MENU && (
@@ -599,8 +555,6 @@ export default function App() {
       {screen === SCREENS.R10 && (
         <Reto10 onHome={irASala(9)} onSalir={irASala(9)} />
       )}
-        </div>
-      </div>
-    </div>
+    </>
   );
 }

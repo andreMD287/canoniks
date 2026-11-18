@@ -43,7 +43,7 @@ export default function Menu({
   if (imagenCompleta) {
     // el diseño ya trae los textos: sólo se colocan las zonas pulsables
     return (
-      <ScreenShell scroll={false}>
+      <ScreenShell scroll={false} background={fondo || imagenCompleta ? "bg-[var(--negro-principal)]" : undefined}>
         <img
           src={imagenCompleta}
           alt={`Archivo, ${sala}: ${titulo}`}
@@ -87,7 +87,7 @@ export default function Menu({
   }
 
   return (
-    <ScreenShell scroll={false}>
+    <ScreenShell scroll={false} background={fondo || imagenCompleta ? "bg-[var(--negro-principal)]" : undefined}>
       <button
         type="button"
         onClick={onBack}

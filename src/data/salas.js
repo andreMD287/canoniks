@@ -2,6 +2,13 @@ import fondoSala1 from "../assets/menu-fondo-sala1.png";
 import fondoSala2 from "../assets/menu-fondo-sala2.png";
 import fondoPaneles from "../assets/menu-fondo-paneles.png";
 import fondoVitrinas from "../assets/menu-fondo-vitrinas.png";
+import menuSala4 from "../assets/menu-sala4.jpg";
+import menuSala5 from "../assets/menu-sala5.jpg";
+import menuSala6 from "../assets/menu-sala6.jpg";
+import menuSala7 from "../assets/menu-sala7.jpg";
+import menuSala8 from "../assets/menu-sala8.jpg";
+import menuSala9 from "../assets/menu-sala9.jpg";
+import menuSala10 from "../assets/menu-sala10.jpg";
 import menuSala3 from "../assets/menu-sala3-completo.png";
 
 const DESCRIPCION_SALA_1 =
@@ -51,6 +58,7 @@ export const SALAS = [
     sala: "Sala 4",
     titulo: "El lugar que no estaba destinado para ella",
     descripcion: DESCRIPCION_BARRERAS,
+    imagenCompleta: menuSala4,
     fondo: { src: fondoPaneles, left: -52, ancho: 516 },
     descripcionAncho: 287,
     descripcionTop: 611,
@@ -60,6 +68,7 @@ export const SALAS = [
     sala: "Sala 5",
     titulo: "Lo que llamaron manualidad",
     descripcion: DESCRIPCION_BARRERAS,
+    imagenCompleta: menuSala5,
     fondo: { src: fondoVitrinas, left: -109, ancho: 656 },
     descripcionAncho: 287,
     descripcionTop: 611,
@@ -69,6 +78,7 @@ export const SALAS = [
     sala: "Sala 6",
     titulo: "¿De quién es la idea?",
     descripcion: DESCRIPCION_BARRERAS,
+    imagenCompleta: menuSala6,
     fondo: { src: fondoPaneles, left: -52, ancho: 516 },
     descripcionAncho: 287,
     descripcionTop: 611,
@@ -78,6 +88,7 @@ export const SALAS = [
     sala: "Sala 7",
     titulo: "El mérito que cambió de nombre",
     descripcion: DESCRIPCION_BARRERAS,
+    imagenCompleta: menuSala7,
     fondo: { src: fondoPaneles, left: -52, ancho: 516 },
     descripcionAncho: 287,
     descripcionTop: 611,
@@ -87,6 +98,7 @@ export const SALAS = [
     sala: "Sala 8",
     titulo: "La puerta del reconocimiento",
     descripcion: DESCRIPCION_BARRERAS,
+    imagenCompleta: menuSala8,
     fondo: { src: fondoPaneles, left: -52, ancho: 516 },
     descripcionAncho: 287,
     descripcionTop: 611,
@@ -96,6 +108,7 @@ export const SALAS = [
     sala: "Sala 9",
     titulo: "La historia que fue seleccionada",
     descripcion: DESCRIPCION_BARRERAS,
+    imagenCompleta: menuSala9,
     fondo: { src: fondoPaneles, left: -52, ancho: 516 },
     descripcionAncho: 287,
     descripcionTop: 611,
@@ -105,6 +118,7 @@ export const SALAS = [
     sala: "Sala 10",
     titulo: "Las ausencias que se cruzan",
     descripcion: DESCRIPCION_BARRERAS,
+    imagenCompleta: menuSala10,
     fondo: { src: fondoPaneles, left: -52, ancho: 516 },
     descripcionAncho: 287,
     descripcionTop: 611,

@@ -11,6 +11,7 @@ import estrellaBodega from "../assets/estrella-bodega.svg";
 export default function Bodega({ onHome, onBack, onEntrarALaBodega }) {
   return (
     <ScreenShell
+      ajustar
       background="bg-[var(--negro-bodega)]"
       footer={
         <ActionButton onClick={onEntrarALaBodega}>Confirmar hallazgo&nbsp; →</ActionButton>

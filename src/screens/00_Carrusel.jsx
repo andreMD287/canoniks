@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import Escenario from "../components/Escenario";
 import Intro from "./00_Intro";
 import Start from "./00_Start";
 
@@ -24,8 +25,9 @@ export default function Carrusel({ onExplorar }) {
   };
 
   return (
+    <Escenario background="bg-[var(--azul-oscuro)]">
     <div
-      className="relative mx-auto h-[917px] w-[412px] touch-pan-y overflow-hidden bg-[var(--azul-oscuro)]"
+      className="relative size-full touch-pan-y overflow-hidden bg-[var(--azul-oscuro)]"
       onTouchStart={(e) => {
         inicio.current = e.touches[0].clientX;
       }}
@@ -66,5 +68,6 @@ export default function Carrusel({ onExplorar }) {
         ))}
       </div>
     </div>
+    </Escenario>
   );
 }
