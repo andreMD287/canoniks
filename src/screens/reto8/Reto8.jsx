@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { guardarRespuesta } from "../../data/respuestas";
 import {
   Campo,
   Destacado,
@@ -149,6 +150,10 @@ export default function Reto8({ onHome, onSalir }) {
 
   const ir = (n) => () => setPaso(n);
   const comunes = { reto: RETO, onHome };
+  const finalizar = () => {
+    guardarRespuesta("Sala 08", reflexion, { respuestas: sel });
+    onSalir();
+  };
   const completadas = PUERTAS.filter((_, i) => {
     const p = PUERTAS[i];
     if (p.multiple) return (sel[i] || []).length > 0 && revisada[i];
@@ -278,7 +283,7 @@ export default function Reto8({ onHome, onSalir }) {
       titulo="EXPEDIENTE COMPLETADO."
       onBack={ir(6)}
       boton="VOLVER AL MUSEO"
-      onBoton={onSalir}
+      onBoton={finalizar}
     >
       <div className="flex gap-[6px]">
         {NOMBRES.map((nombre, i) => (

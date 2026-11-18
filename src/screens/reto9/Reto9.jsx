@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { guardarRespuesta } from "../../data/respuestas";
 import {
   Campo,
   Destacado,
@@ -76,6 +77,10 @@ export default function Reto9({ onHome, onSalir }) {
 
   const ir = (n) => () => setPaso(n);
   const comunes = { reto: RETO, onHome };
+  const finalizar = () => {
+    guardarRespuesta("Sala 09", reflexion, { lineaDeTiempo: slots });
+    onSalir();
+  };
   const libres = IDS.filter((id) => !slots.includes(id));
 
   const colocar = (id, pos) => {
@@ -328,7 +333,7 @@ export default function Reto9({ onHome, onSalir }) {
       titulo="EXPEDIENTE COMPLETADO."
       onBack={ir(4)}
       boton="VOLVER AL MUSEO"
-      onBoton={onSalir}
+      onBoton={finalizar}
     >
       <Imagen rotulo="Expediente archivado: documentos recuperados, planos o fotografías históricas" alto={90} />
       <Texto className="font-semibold">

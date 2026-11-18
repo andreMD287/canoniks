@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { guardarRespuesta } from "../../data/respuestas";
 import {
   Campo,
   Destacado,
@@ -61,6 +62,10 @@ export default function Reto6({ onHome, onSalir }) {
 
   const ir = (n) => () => setPaso(n);
   const comunes = { reto: RETO, onHome };
+  const finalizar = () => {
+    guardarRespuesta("Sala 06", reflexion, { decisiones: dec });
+    onSalir();
+  };
 
   if (paso === 0) {
     return (
@@ -211,7 +216,7 @@ export default function Reto6({ onHome, onSalir }) {
       titulo="El crédito también se construye"
       onBack={ir(4)}
       boton="FINALIZAR RECORRIDO"
-      onBoton={onSalir}
+      onBoton={finalizar}
     >
       <Texto>
         «La apropiación y el borramiento de la autoría ocurren cuando los conocimientos y las

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { guardarRespuesta } from "../../data/respuestas";
 import {
   Campo,
   Destacado,
@@ -65,6 +66,10 @@ export default function Reto10({ onHome, onSalir }) {
 
   const ir = (n) => () => setPaso(n);
   const comunes = { reto: RETO, onHome };
+  const finalizar = () => {
+    guardarRespuesta("Sala 10", reflexion, { conexiones: conex });
+    onSalir();
+  };
   const relacionadas = Object.values(conex).filter((l) => l.length > 0).length;
 
   const alternar = (dim) =>
@@ -287,7 +292,7 @@ export default function Reto10({ onHome, onSalir }) {
       titulo="UN RECONOCIMIENTO MÁS AMPLIO."
       onBack={ir(4)}
       boton="FINALIZAR RECORRIDO"
-      onBoton={onSalir}
+      onBoton={finalizar}
     >
       <Texto>
         «Reconocer las ausencias también implica revisar las reglas con las que decidimos qué

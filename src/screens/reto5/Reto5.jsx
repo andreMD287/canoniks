@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { guardarRespuesta } from "../../data/respuestas";
 import {
   Campo,
   Destacado,
@@ -44,6 +45,10 @@ export default function Reto5({ onHome, onSalir }) {
   const clasificadas = categoria.filter(Boolean).length;
   const ir = (n) => () => setPaso(n);
   const comunes = { reto: RETO, onHome };
+  const finalizar = () => {
+    guardarRespuesta("Sala 05", reflexion, { categorias: categoria, criterios });
+    onSalir();
+  };
 
   const elegirCategoria = (c) =>
     setCategoria((a) => a.map((v, i) => (i === pieza ? (v === c ? null : c) : v)));
@@ -312,7 +317,7 @@ export default function Reto5({ onHome, onSalir }) {
       titulo="EL VALOR TAMBIÉN ESTÁ EN LOS CRITERIOS."
       onBack={ir(4)}
       boton="FINALIZAR RECORRIDO"
-      onBoton={onSalir}
+      onBoton={finalizar}
     >
       <Texto>
         «Llamar a una producción manualidad, artesanía, arte o diseño no es una decisión neutral.

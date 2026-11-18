@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { guardarRespuesta } from "../../data/respuestas";
 import {
   Campo,
   Destacado,
@@ -46,6 +47,10 @@ export default function Reto7({ onHome, onSalir }) {
 
   const ir = (n) => () => setPaso(n);
   const comunes = { reto: RETO, onHome };
+  const finalizar = () => {
+    guardarRespuesta("Sala 07", reflexion, { titular: texto });
+    onSalir();
+  };
 
   const alternar = (i) =>
     setTitular((t) => {
@@ -238,7 +243,7 @@ export default function Reto7({ onHome, onSalir }) {
       titulo="EXPEDIENTE COMPLETADO."
       onBack={ir(4)}
       boton="VOLVER AL MUSEO"
-      onBoton={onSalir}
+      onBoton={finalizar}
     >
       <div className="self-start -rotate-6 rounded-[6px] border-[3px] border-solid border-[var(--verde-principal)] px-[12px] py-[4px] text-[14px] font-extrabold tracking-widest text-[var(--verde-principal)]">
         REVISADO

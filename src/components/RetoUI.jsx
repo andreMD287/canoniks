@@ -131,8 +131,9 @@ export function Campo({ valor, onCambio, placeholder = "Escribe tu reflexión…
         placeholder={placeholder}
         className="w-full resize-none rounded-[13px] border-2 border-solid border-[var(--verde-principal)] bg-[var(--blanco-principal)] px-[14px] py-[12px] text-[14px] leading-[1.4] text-[var(--negro-principal)] outline-none placeholder:text-[var(--negro-principal)]/50"
       />
-      <p className="mt-[4px] text-right text-[10px] text-[var(--blanco-principal)]/60">
-        {valor.length}/400
+      <p className="mt-[4px] flex justify-between gap-[8px] text-[10px] text-[var(--blanco-principal)]/60">
+        <span>Tu respuesta se guarda de forma anónima para el análisis del curso.</span>
+        <span className="shrink-0">{valor.length}/400</span>
       </p>
     </div>
   );
