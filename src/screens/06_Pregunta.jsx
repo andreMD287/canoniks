@@ -3,6 +3,8 @@ import TopBar from "../components/TopBar";
 import ScreenShell from "../components/ScreenShell";
 import FolderCard from "../components/FolderCard";
 import ActionButton from "../components/ActionButton";
+import Intentos from "../components/Intentos";
+import Opcion from "../components/OpcionRespuesta";
 import folderPreguntaEnCurso from "../assets/folder-pregunta-en-curso.svg";
 import {
   MAX_INTENTOS,
@@ -10,74 +12,6 @@ import {
   OPCION_CORRECTA,
   textoIntentos,
 } from "../data/pregunta";
-
-const ESTILO_OPCION = {
-  normal: "bg-[var(--blanco-principal)] text-[var(--negro-principal)]",
-  seleccionada: "bg-[var(--verde-principal)] text-[var(--negro-principal)]",
-  incorrecta: "bg-[var(--morado-principal)] text-[var(--blanco-principal)]",
-};
-
-/** "INTENTOS 1 2 3": los gastados se pintan en negro, los disponibles en verde. */
-function Intentos({ usados }) {
-  return (
-    <div
-      role="status"
-      aria-label={`Intentos usados: ${usados} de ${MAX_INTENTOS}`}
-      className="mt-[22px] flex h-[50px] items-center justify-between rounded-[25px] bg-[var(--blanco-principal)] pl-[17px] pr-[28px]"
-    >
-      <span className="text-[11px] font-semibold leading-[1.4] text-[var(--negro-principal)]">
-        INTENTOS
-      </span>
-      <div className="flex gap-[10px]">
-        {Array.from({ length: MAX_INTENTOS }, (_, i) => {
-          const gastado = i < usados;
-          return (
-            <span
-              key={i}
-              className={`flex size-[29px] items-center justify-center rounded-full text-[13px] font-semibold ${
-                gastado
-                  ? "bg-[var(--negro-principal)] text-[var(--blanco-principal)]"
-                  : "bg-[var(--verde-principal)] text-[var(--negro-principal)]"
-              }`}
-            >
-              {i + 1}
-            </span>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function Opcion({ id, texto, estado, deshabilitada, onClick }) {
-  return (
-    <button
-      type="button"
-      role="radio"
-      aria-checked={estado !== "normal"}
-      disabled={deshabilitada}
-      onClick={onClick}
-      className={`relative h-[60px] w-full rounded-[13px] text-left ${ESTILO_OPCION[estado]}`}
-    >
-      <span className="font-display absolute left-[16px] top-[16px] text-[18px] font-extrabold leading-[1.12]">
-        {id}
-      </span>
-      <span className="absolute left-[60px] top-[20px] text-[15px] font-semibold leading-[1.4]">
-        {texto}
-      </span>
-      {estado === "seleccionada" && (
-        <span aria-hidden="true" className="absolute left-[324px] top-[15px] text-[20px] font-semibold leading-[1.4]">
-          ●
-        </span>
-      )}
-      {estado === "incorrecta" && (
-        <span aria-hidden="true" className="absolute left-[324px] top-[15px] text-[20px] font-semibold leading-[1.4]">
-          ×
-        </span>
-      )}
-    </button>
-  );
-}
 
 /**
  * Pantallas 06 a 10 del Figma en un solo componente con estados:

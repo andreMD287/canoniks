@@ -20,6 +20,16 @@ const PERSONAJE_W = Math.round(CELDA_W * ESCALA);
 const PERSONAJE_H = Math.round(CELDA_H * ESCALA);
 const PERSONAJE_X = 58;
 
+// Llegada: al cumplir la meta el mundo se detiene, Marianne corre hasta la
+// puerta del taller, se para delante unos segundos y sólo entonces acaba la
+// partida.
+const PUERTA_X = 296; // posición final de la puerta en el canvas
+const PUERTA_W = 96;
+const PARADA_X = PUERTA_X - PERSONAJE_W + 8; // dónde se detiene Marianne
+const V_LLEGADA = 190; // px/s en el último tramo
+const PAUSA_META = 2.6; // s parada ante la puerta
+const APERTURA = 0.6; // s que tarda en abrirse la puerta
+
 const GRAVEDAD = 2400;
 const IMPULSO = -860;
 const V_INICIAL = 280;
@@ -57,6 +67,9 @@ export function crearCorredor({
   ctx.imageSmoothingQuality = "high";
 
   const estado = {
+    x: PERSONAJE_X, // posición horizontal de Marianne
+    llegando: false,
+    parado: 0, // segundos que lleva parada ante la puerta
     distancia: 0,
     velocidad: V_INICIAL,
     y: 0, // altura sobre el suelo
@@ -91,7 +104,36 @@ export function crearCorredor({
     estado.proxima = 480 + Math.random() * 340;
   }
 
+  function fisicaSalto(dt) {
+    if (!estado.enElAire) return;
+    estado.vy += GRAVEDAD * dt;
+    estado.y += estado.vy * dt;
+    if (estado.y >= 0) {
+      estado.y = 0;
+      estado.vy = 0;
+      estado.enElAire = false;
+    }
+  }
+
+  /** Último tramo: corre hasta la puerta, se para y espera. */
+  function llegar(dt) {
+    estado.reloj += dt;
+    fisicaSalto(dt);
+    if (estado.x < PARADA_X) {
+      estado.x = Math.min(PARADA_X, estado.x + V_LLEGADA * dt);
+      return undefined;
+    }
+    if (!estado.enElAire) estado.parado += dt;
+    if (estado.parado >= PAUSA_META) {
+      estado.terminado = true;
+      return null;
+    }
+    return undefined;
+  }
+
   function avanzar(dt) {
+    if (estado.llegando) return llegar(dt);
+
     const progreso = estado.distancia / meta;
     estado.velocidad = V_INICIAL + (V_MAXIMA - V_INICIAL) * limitar(progreso, 0, 1);
 
@@ -100,23 +142,14 @@ export function crearCorredor({
     estado.reloj += dt;
     estado.puntos += paso / 20;
 
-    // salto
-    if (estado.enElAire) {
-      estado.vy += GRAVEDAD * dt;
-      estado.y += estado.vy * dt;
-      if (estado.y >= 0) {
-        estado.y = 0;
-        estado.vy = 0;
-        estado.enElAire = false;
-      }
-    }
+    fisicaSalto(dt);
 
     // barreras
     estado.proxima -= paso;
     if (estado.proxima <= 0 && estado.distancia < meta - 700) sembrar();
 
     const miCaja = caja();
-    const miX = PERSONAJE_X + (PERSONAJE_W - miCaja.ancho) / 2;
+    const miX = estado.x + (PERSONAJE_W - miCaja.ancho) / 2;
     const miArriba = SUELO + estado.y - miCaja.alto;
     const miAbajo = SUELO + estado.y;
 
@@ -141,8 +174,9 @@ export function crearCorredor({
     estado.barreras = estado.barreras.filter((b) => b.x > -120);
 
     if (estado.distancia >= meta) {
-      estado.terminado = true;
-      return null;
+      estado.distancia = meta;
+      estado.llegando = true;
+      estado.agachado = false;
     }
     return undefined;
   }
@@ -163,15 +197,27 @@ export function crearCorredor({
     // la puerta del taller aparece al final del recorrido
     const restante = meta - estado.distancia;
     if (restante < 900) {
-      const x = ANCHO - 60 + (restante / 900) * 520;
+      // entra desde la derecha y queda fija en PUERTA_X al llegar a la meta
+      const x = PUERTA_X + (restante / 900) * (ANCHO + 40 - PUERTA_X);
       ctx.fillStyle = VERDE;
-      ctx.fillRect(x, SUELO - 190, 96, 190);
-      ctx.fillStyle = NEGRO;
-      ctx.font = "700 11px Alexandria, sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("TALLER", x + 48, SUELO - 100);
-      ctx.fillText("DE METAL", x + 48, SUELO - 84);
-      ctx.textAlign = "left";
+      ctx.fillRect(x, SUELO - 190, PUERTA_W, 190);
+
+      const abierta = limitar(estado.parado / APERTURA, 0, 1);
+      if (abierta > 0) {
+        // la puerta se abre: el interior del taller se ilumina
+        const ancho = (PUERTA_W - 20) * abierta;
+        ctx.fillStyle = NEGRO;
+        ctx.fillRect(x + 10, SUELO - 180, ancho, 180);
+        ctx.fillStyle = "rgba(174,242,0,0.22)";
+        ctx.fillRect(x + 10, SUELO - 180, ancho, 180);
+      } else {
+        ctx.fillStyle = NEGRO;
+        ctx.font = "700 11px Alexandria, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("TALLER", x + PUERTA_W / 2, SUELO - 100);
+        ctx.fillText("DE METAL", x + PUERTA_W / 2, SUELO - 84);
+        ctx.textAlign = "left";
+      }
     }
 
     // suelo
@@ -287,6 +333,7 @@ export function crearCorredor({
   function dibujarPersonaje() {
     let hoja = sprites.correr;
     let indice = Math.floor(estado.reloj * 14) % 8;
+    const quieta = estado.llegando && estado.x >= PARADA_X && !estado.enElAire;
 
     if (estado.enElAire) {
       // El sprite del salto va del impulso (3) a la caída (6) según la altura.
@@ -299,8 +346,15 @@ export function crearCorredor({
       indice = Math.floor(estado.reloj * 8) % 2;
     }
 
+    if (quieta && sprites.reposo) {
+      hoja = sprites.reposo;
+      indice = 0;
+    } else if (quieta) {
+      indice = 0; // primer fotograma de la carrera
+    }
+
     const origenX = indice * CELDA_W;
-    const destinoX = PERSONAJE_X;
+    const destinoX = estado.x;
     const destinoY = SUELO + estado.y - PERSONAJE_H;
 
     ctx.drawImage(
@@ -363,18 +417,21 @@ export function crearCorredor({
       rafId = null;
     },
     saltar() {
-      if (estado.enElAire || estado.terminado) return;
+      if (estado.enElAire || estado.terminado || estado.llegando) return;
       estado.enElAire = true;
       estado.agachado = false;
       estado.vy = IMPULSO;
     },
     agachar(valor) {
-      if (estado.terminado) return;
+      if (estado.terminado || estado.llegando) return;
       estado.agachado = valor && !estado.enElAire;
     },
     /** Sólo para depurar y para las pruebas: foto del estado actual. */
     leerEstado: () => ({
       distancia: estado.distancia,
+      x: estado.x,
+      llegando: estado.llegando,
+      parado: estado.parado,
       y: estado.y,
       enElAire: estado.enElAire,
       agachado: estado.agachado,

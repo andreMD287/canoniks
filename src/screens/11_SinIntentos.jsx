@@ -8,7 +8,13 @@ import folderSinIntentos from "../assets/folder-sin-intentos.svg";
  * Se llega aquí al fallar el tercer intento. No hay desbloqueo ni recompensa:
  * la única salida es volver al archivo (el reto no queda completado).
  */
-export default function SinIntentos({ onHome, onSalir }) {
+export default function SinIntentos({
+  onHome,
+  onSalir,
+  titulo,
+  etapa = "03 / RESOLVER · INTENTOS AGOTADOS",
+  pendiente = "La bodega sigue bloqueada.",
+}) {
   return (
     <ScreenShell
       footer={
@@ -20,11 +26,11 @@ export default function SinIntentos({ onHome, onSalir }) {
         </>
       }
     >
-      <TopBar onHome={onHome} onBack={onSalir} />
+      <TopBar title={titulo} onHome={onHome} onBack={onSalir} />
 
       <div className="px-6 pt-[28px]">
         <p className="text-[11px] font-semibold leading-[1.4] text-[var(--verde-principal)]">
-          03 / RESOLVER · INTENTOS AGOTADOS
+          {etapa}
         </p>
 
         <h1 className="font-display mt-[29px] text-[40px] font-extrabold leading-[1.12] text-[var(--verde-principal)]">
@@ -56,7 +62,7 @@ export default function SinIntentos({ onHome, onSalir }) {
 
           <div className="mt-[60px] min-h-[73px] rounded-[13px] bg-[var(--blanco-principal)] px-[16px] pt-[15px] pb-[14px] text-[var(--negro-principal)]">
             <p className="text-[12px] font-semibold leading-[1.4]">EXPEDIENTE PENDIENTE</p>
-            <p className="mt-[7px] text-[13px] leading-[1.4]">La bodega sigue bloqueada.</p>
+            <p className="mt-[7px] text-[13px] leading-[1.4]">{pendiente}</p>
           </div>
         </FolderCard>
       </div>

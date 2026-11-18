@@ -39,7 +39,13 @@ function FichaDocumento({ orden, titulo, pie, enlace, verde = false, onClick }) 
   );
 }
 
-export default function R2Documentos({ onHome, onBack, onVerPatente, onVerCarta }) {
+export default function R2Documentos({
+  onHome,
+  onBack,
+  onVerPatente,
+  onVerCarta,
+  patenteResuelta = false,
+}) {
   return (
     <ScreenShell
       footer={
@@ -74,8 +80,8 @@ export default function R2Documentos({ onHome, onBack, onVerPatente, onVerCarta 
             orden="02 / 1927"
             titulo="Correspondencia"
             pie="Le Corbusier · Carta a Perriand"
-            enlace="Leer la carta  →"
-            onClick={onVerCarta}
+            enlace={patenteResuelta ? "Leer la carta  →" : "Se abre al resolver la patente"}
+            onClick={patenteResuelta ? onVerCarta : undefined}
           />
           <FichaDocumento
             orden="03 / 1929"

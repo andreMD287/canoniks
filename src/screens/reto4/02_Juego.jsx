@@ -4,6 +4,7 @@ import { ALTO, ANCHO, crearCorredor } from "../../juego/corredor";
 import correrPng from "../../assets/n4-correr.png";
 import saltarPng from "../../assets/n4-saltar.png";
 import agacharPng from "../../assets/n4-agachar.png";
+import reposoPng from "../../assets/n4-idle.png";
 import { META, OBSTACULOS, marcador } from "../../data/reto4";
 
 const cargar = (src) =>
@@ -50,13 +51,18 @@ export default function R4Juego({ onMenu, onFin }) {
   useEffect(() => {
     let vivo = true;
 
-    Promise.all([cargar(correrPng), cargar(saltarPng), cargar(agacharPng)])
-      .then(([correr, saltar, agachar]) => {
+    Promise.all([
+      cargar(correrPng),
+      cargar(saltarPng),
+      cargar(agacharPng),
+      cargar(reposoPng),
+    ])
+      .then(([correr, saltar, agachar, reposo]) => {
         if (!vivo || !lienzo.current) return;
         setCargando(false);
         motor.current = crearCorredor({
           canvas: lienzo.current,
-          sprites: { correr, saltar, agachar },
+          sprites: { correr, saltar, agachar, reposo },
           obstaculos: OBSTACULOS,
           meta: META,
           onCambio: setHud,
@@ -143,7 +149,7 @@ export default function R4Juego({ onMenu, onFin }) {
       </div>
 
       <p className="absolute left-6 top-[185px] w-[364px] text-center text-[20px] leading-[1.45] text-[var(--blanco-principal)]">
-        Llega al taller sin chocar.
+        {hud.avance >= 1 ? "¡Marianne llegó al taller!" : "Llega al taller sin chocar."}
       </p>
 
       {/* Área de juego */}

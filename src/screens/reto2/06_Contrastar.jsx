@@ -24,12 +24,7 @@ const REGISTROS = [
   },
 ];
 
-export default function R2Contrastar({
-  onHome,
-  onBack,
-  onReconstruir,
-  identificados = [],
-}) {
+export default function R2Contrastar({ onHome, onBack, onReconstruir }) {
   return (
     <ScreenShell
       footer={
@@ -72,11 +67,9 @@ export default function R2Contrastar({
           ))}
         </div>
 
-        {identificados.length > 0 && (
-          <p className="mt-[18px] text-[13px] leading-[1.4] text-[var(--verde-principal)]">
-            En la patente marcaste: {identificados.join(", ")}.
-          </p>
-        )}
+        <p className="mt-[18px] text-[13px] leading-[1.4] text-[var(--verde-principal)]">
+          En la patente figuran Le Corbusier y Pierre Jeanneret.
+        </p>
 
         <p className="mt-[23px] text-[13px] leading-[1.4] text-[var(--blanco-principal)]">
           Una fuente prueba algo concreto. No todas

@@ -60,6 +60,7 @@ const SCREENS = {
   R2_DOCUMENTOS: "r2Documentos",
   R2_PATENTE: "r2Patente",
   R2_IDENTIFICAR: "r2Identificar",
+  R2_SIN_INTENTOS: "r2SinIntentos",
   R2_CARTA: "r2Carta",
   R2_CONTRASTAR: "r2Contrastar",
   R2_RESTITUIR: "r2Restituir",
@@ -160,8 +161,10 @@ export default function App() {
   const [volverDeB, setVolverDeB] = useState(SCREENS.EXPEDIENTES);
   const [intentosUsados, setIntentosUsados] = useState(0);
   const [resuelta, setResuelta] = useState(false);
-  // Reto 2: nombres marcados en la patente de 1928
-  const [identificados, setIdentificados] = useState([]);
+  // Reto 2: pregunta de la patente (3 intentos) y desde dónde se abrió la carta
+  const [intentosR2, setIntentosR2] = useState(0);
+  const [resueltaR2, setResueltaR2] = useState(false);
+  const [volverDeCarta, setVolverDeCarta] = useState(SCREENS.R2_IDENTIFICAR);
   // Reto 4: resultado de la última partida y nº de intento (remonta el juego)
   const [partida, setPartida] = useState({ puntos: 0, avance: 0, obstaculo: null });
   const [intento, setIntento] = useState(0);
@@ -213,8 +216,21 @@ export default function App() {
     irAlArchivo();
   };
 
+  const fallarR2 = () => {
+    const usados = intentosR2 + 1;
+    setIntentosR2(usados);
+    if (usados >= MAX_INTENTOS) setScreen(SCREENS.R2_SIN_INTENTOS);
+  };
+
+  const abrirCarta = (desde) => {
+    setVolverDeCarta(desde);
+    setScreen(SCREENS.R2_CARTA);
+  };
+
   const reiniciar2 = () => {
-    setIdentificados([]);
+    setIntentosR2(0);
+    setResueltaR2(false);
+    setVolverDeCarta(SCREENS.R2_IDENTIFICAR);
     irAlArchivo2();
   };
 
@@ -365,7 +381,8 @@ export default function App() {
           onHome={irAlArchivo2}
           onBack={ir(SCREENS.R2_MISION)}
           onVerPatente={ir(SCREENS.R2_PATENTE)}
-          onVerCarta={ir(SCREENS.R2_CARTA)}
+          onVerCarta={() => abrirCarta(SCREENS.R2_DOCUMENTOS)}
+          patenteResuelta={resueltaR2}
         />
       )}
 
@@ -381,17 +398,28 @@ export default function App() {
         <R2Identificar
           onHome={irAlArchivo2}
           onBack={ir(SCREENS.R2_PATENTE)}
-          onGuardar={(nombres) => {
-            setIdentificados(nombres);
-            setScreen(SCREENS.R2_CARTA);
-          }}
+          intentosUsados={intentosR2}
+          resuelta={resueltaR2}
+          onFallar={fallarR2}
+          onAcertar={() => setResueltaR2(true)}
+          onContinuar={() => abrirCarta(SCREENS.R2_IDENTIFICAR)}
+        />
+      )}
+
+      {screen === SCREENS.R2_SIN_INTENTOS && (
+        <SinIntentos
+          titulo="EXPEDIENTE 02"
+          etapa="02 / IDENTIFICAR · INTENTOS AGOTADOS"
+          pendiente="La carta de 1927 sigue sin abrirse."
+          onHome={irAlArchivo2}
+          onSalir={reiniciar2}
         />
       )}
 
       {screen === SCREENS.R2_CARTA && (
         <R2Carta
           onHome={irAlArchivo2}
-          onBack={ir(SCREENS.R2_IDENTIFICAR)}
+          onBack={ir(volverDeCarta)}
           onSeguir={ir(SCREENS.R2_CONTRASTAR)}
         />
       )}
@@ -401,7 +429,6 @@ export default function App() {
           onHome={irAlArchivo2}
           onBack={ir(SCREENS.R2_CARTA)}
           onReconstruir={ir(SCREENS.R2_RESTITUIR)}
-          identificados={identificados}
         />
       )}
 
