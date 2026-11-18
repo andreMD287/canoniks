@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { guardarRespuesta } from "../../data/respuestas";
+import PantallaFinal from "../../components/PantallaFinal";
+import imagenFinal from "../../assets/final-reto08.png";
 import {
   Campo,
   Destacado,
@@ -150,10 +152,23 @@ export default function Reto8({ onHome, onSalir }) {
 
   const ir = (n) => () => setPaso(n);
   const comunes = { reto: RETO, onHome };
+  const [final, setFinal] = useState(false);
   const finalizar = () => {
     guardarRespuesta("Sala 08", reflexion, { respuestas: sel });
-    onSalir();
+    setFinal(true);
   };
+
+  if (final) {
+    return (
+      <PantallaFinal
+        imagen={imagenFinal}
+        alt="Pantalla final del reto 08: nos vemos en el debate"
+        onHome={onHome}
+        onBack={() => setFinal(false)}
+        onVolver={onSalir}
+      />
+    );
+  }
   const completadas = PUERTAS.filter((_, i) => {
     const p = PUERTAS[i];
     if (p.multiple) return (sel[i] || []).length > 0 && revisada[i];

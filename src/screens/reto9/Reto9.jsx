@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { guardarRespuesta } from "../../data/respuestas";
+import PantallaFinal from "../../components/PantallaFinal";
+import imagenFinal from "../../assets/final-reto09.png";
 import {
   Campo,
   Destacado,
@@ -77,10 +79,23 @@ export default function Reto9({ onHome, onSalir }) {
 
   const ir = (n) => () => setPaso(n);
   const comunes = { reto: RETO, onHome };
+  const [final, setFinal] = useState(false);
   const finalizar = () => {
     guardarRespuesta("Sala 09", reflexion, { lineaDeTiempo: slots });
-    onSalir();
+    setFinal(true);
   };
+
+  if (final) {
+    return (
+      <PantallaFinal
+        imagen={imagenFinal}
+        alt="Pantalla final del reto 09: nos vemos en el debate"
+        onHome={onHome}
+        onBack={() => setFinal(false)}
+        onVolver={onSalir}
+      />
+    );
+  }
   const libres = IDS.filter((id) => !slots.includes(id));
 
   const colocar = (id, pos) => {

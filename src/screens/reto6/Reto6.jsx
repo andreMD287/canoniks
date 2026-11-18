@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { guardarRespuesta } from "../../data/respuestas";
+import PantallaFinal from "../../components/PantallaFinal";
+import imagenFinal from "../../assets/final-reto06.webp";
 import {
   Campo,
   Destacado,
@@ -62,10 +64,23 @@ export default function Reto6({ onHome, onSalir }) {
 
   const ir = (n) => () => setPaso(n);
   const comunes = { reto: RETO, onHome };
+  const [final, setFinal] = useState(false);
   const finalizar = () => {
     guardarRespuesta("Sala 06", reflexion, { decisiones: dec });
-    onSalir();
+    setFinal(true);
   };
+
+  if (final) {
+    return (
+      <PantallaFinal
+        imagen={imagenFinal}
+        alt="Pantalla final del reto 06: nos vemos en el debate"
+        onHome={onHome}
+        onBack={() => setFinal(false)}
+        onVolver={onSalir}
+      />
+    );
+  }
 
   if (paso === 0) {
     return (

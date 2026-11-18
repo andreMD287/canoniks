@@ -2,6 +2,7 @@ import fondoSala1 from "../assets/menu-fondo-sala1.png";
 import fondoSala2 from "../assets/menu-fondo-sala2.png";
 import fondoPaneles from "../assets/menu-fondo-paneles.png";
 import fondoVitrinas from "../assets/menu-fondo-vitrinas.png";
+import menuSala3 from "../assets/menu-sala3-completo.png";
 
 const DESCRIPCION_SALA_1 =
   "Que una decisión de diseño aparentemente neutral puede reproducir una " +
@@ -39,7 +40,8 @@ export const SALAS = [
       "Las actividades y responsabilidades se distribuyeron según roles de " +
       "género, creando jerarquías entre el trabajo productivo, técnico y " +
       "público y el trabajo doméstico, textil y artesanal.",
-    // pendiente: el fondo de esta sala no se pudo descargar del Figma
+    // la imagen del diseño ya trae los textos: se muestra completa
+    imagenCompleta: menuSala3,
     fondo: null,
     descripcionAncho: 319,
     descripcionTop: 611,

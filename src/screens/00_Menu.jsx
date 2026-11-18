@@ -19,6 +19,7 @@ export default function Menu({
   titulo,
   descripcion,
   fondo,
+  imagenCompleta,
   ilustracion,
   // la Sala 3 lleva la descripción algo más estrecha y más abajo
   descripcionAncho = 354,
@@ -38,6 +39,52 @@ export default function Menu({
     }
     setAviso(true);
   };
+
+  if (imagenCompleta) {
+    // el diseño ya trae los textos: sólo se colocan las zonas pulsables
+    return (
+      <ScreenShell scroll={false}>
+        <img
+          src={imagenCompleta}
+          alt={`Archivo, ${sala}: ${titulo}`}
+          draggable={false}
+          className="pointer-events-none absolute inset-0 size-full max-w-none select-none"
+        />
+        <button
+          type="button"
+          onClick={onBack}
+          aria-label="Volver"
+          className="absolute left-[13px] top-[27px] size-[47px] rounded-[8px]"
+        />
+        <button
+          type="button"
+          onClick={onSalaAnterior}
+          aria-label="Sala anterior"
+          className="absolute left-[-6px] top-[584px] h-[217px] w-[95px] transition-transform duration-300 hover:-translate-x-1"
+        />
+        <button
+          type="button"
+          onClick={onSalaSiguiente}
+          aria-label="Sala siguiente"
+          className="absolute left-[324px] top-[584px] h-[217px] w-[95px] transition-transform duration-300 hover:translate-x-1"
+        />
+        <button
+          type="button"
+          onClick={entrar}
+          aria-label={`Entrar al expediente de ${sala}`}
+          className="absolute left-1/2 top-[765px] h-[100px] w-[220px] -translate-x-1/2"
+        />
+        {aviso && (
+          <p
+            role="status"
+            className="absolute inset-x-6 bottom-[16px] text-center text-[12px] font-semibold leading-[1.4] text-[var(--verde-principal)]"
+          >
+            El reto de esta sala todavía no está disponible.
+          </p>
+        )}
+      </ScreenShell>
+    );
+  }
 
   return (
     <ScreenShell scroll={false}>

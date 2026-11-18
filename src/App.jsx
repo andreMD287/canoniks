@@ -34,10 +34,10 @@ import R4Introduccion from "./screens/reto4/01_Introduccion";
 import R4Juego from "./screens/reto4/02_Juego";
 import R4Derrota from "./screens/reto4/03_Derrota";
 import R4Victoria from "./screens/reto4/04_Victoria";
-import carpetaA from "./assets/menu3-carpeta-a.svg";
-import carpetaB from "./assets/menu3-carpeta-b.svg";
 import { MAX_INTENTOS } from "./data/pregunta";
 import { SALAS } from "./data/salas";
+import PantallaFinal from "./components/PantallaFinal";
+import finalReto4 from "./assets/final-reto04.png";
 import Reto5 from "./screens/reto5/Reto5";
 import Reto6 from "./screens/reto6/Reto6";
 import Reto7 from "./screens/reto7/Reto7";
@@ -86,6 +86,7 @@ const SCREENS = {
   R4_JUEGO: "r4Juego",
   R4_DERROTA: "r4Derrota",
   R4_VICTORIA: "r4Victoria",
+  R4_FINAL: "r4Final",
   // Retos 5 a 10: minijuegos de las salas 5 a 10
   R5: "r5Juego",
   R6: "r6Juego",
@@ -125,24 +126,6 @@ function useEscala() {
 
   return escala;
 }
-
-/* La Sala 3 aún no tiene foto de fondo: lleva sus carpetas como ilustración. */
-const ILUSTRACION_SALA_3 = (
-  <>
-    <img
-      src={carpetaA}
-      alt=""
-      aria-hidden="true"
-      className="pointer-events-none absolute left-[106px] top-[98px] block h-[250.7px] w-[148.7px] max-w-none"
-    />
-    <img
-      src={carpetaB}
-      alt=""
-      aria-hidden="true"
-      className="pointer-events-none absolute left-[158.2px] top-[123.5px] block h-[250.7px] w-[148.8px] max-w-none"
-    />
-  </>
-);
 
 /**
  * Archivo del Museo de las Ausencias.
@@ -270,7 +253,6 @@ export default function App() {
         <Menu
           key={salaActual}
           {...SALAS[salaActual]}
-          ilustracion={salaActual === 2 ? ILUSTRACION_SALA_3 : undefined}
           disponible={SALAS[salaActual].reto !== null}
           onBack={ir(SCREENS.CARRUSEL)}
           onSalaAnterior={cambiarSala(-1)}
@@ -578,7 +560,17 @@ export default function App() {
         <R4Victoria
           onHome={irAlArchivo4}
           partida={partida}
-          onContinuar={irAlArchivo4}
+          onContinuar={ir(SCREENS.R4_FINAL)}
+        />
+      )}
+
+      {screen === SCREENS.R4_FINAL && (
+        <PantallaFinal
+          imagen={finalReto4}
+          alt="Pantalla final del reto 04: el taller también es tuyo"
+          onHome={irAlArchivo4}
+          onBack={ir(SCREENS.R4_VICTORIA)}
+          onVolver={irAlArchivo4}
         />
       )}
 
