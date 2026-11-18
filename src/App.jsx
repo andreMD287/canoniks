@@ -38,6 +38,12 @@ import carpetaA from "./assets/menu3-carpeta-a.svg";
 import carpetaB from "./assets/menu3-carpeta-b.svg";
 import { MAX_INTENTOS } from "./data/pregunta";
 import { SALAS } from "./data/salas";
+import Reto5 from "./screens/reto5/Reto5";
+import Reto6 from "./screens/reto6/Reto6";
+import Reto7 from "./screens/reto7/Reto7";
+import Reto8 from "./screens/reto8/Reto8";
+import Reto9 from "./screens/reto9/Reto9";
+import Reto10 from "./screens/reto10/Reto10";
 
 const SCREENS = {
   CARRUSEL: "carrusel",
@@ -80,6 +86,13 @@ const SCREENS = {
   R4_JUEGO: "r4Juego",
   R4_DERROTA: "r4Derrota",
   R4_VICTORIA: "r4Victoria",
+  // Retos 5 a 10: minijuegos de las salas 5 a 10
+  R5: "r5Juego",
+  R6: "r6Juego",
+  R7: "r7Juego",
+  R8: "r8Juego",
+  R9: "r9Juego",
+  R10: "r10Juego",
 };
 
 const ANCHO_DISENO = 412;
@@ -567,6 +580,32 @@ export default function App() {
           partida={partida}
           onContinuar={irAlArchivo4}
         />
+      )}
+
+      {/* ---------- Salas 5 a 10 ---------- */}
+
+      {screen === SCREENS.R5 && (
+        <Reto5 onHome={irASala(4)} onSalir={irASala(4)} />
+      )}
+
+      {screen === SCREENS.R6 && (
+        <Reto6 onHome={irASala(5)} onSalir={irASala(5)} />
+      )}
+
+      {screen === SCREENS.R7 && (
+        <Reto7 onHome={irASala(6)} onSalir={irASala(6)} />
+      )}
+
+      {screen === SCREENS.R8 && (
+        <Reto8 onHome={irASala(7)} onSalir={irASala(7)} />
+      )}
+
+      {screen === SCREENS.R9 && (
+        <Reto9 onHome={irASala(8)} onSalir={irASala(8)} />
+      )}
+
+      {screen === SCREENS.R10 && (
+        <Reto10 onHome={irASala(9)} onSalir={irASala(9)} />
       )}
         </div>
       </div>

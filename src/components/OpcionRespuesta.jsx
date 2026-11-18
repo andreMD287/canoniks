@@ -11,7 +11,35 @@ const MARCA = { seleccionada: "●", correcta: "✓", incorrecta: "×" };
  * Opción de una pregunta de respuesta única (A, B, C, D). `estado` es
  * "normal", "seleccionada", "correcta" o "incorrecta".
  */
-export default function OpcionRespuesta({ id, texto, estado, deshabilitada, onClick }) {
+export default function OpcionRespuesta({
+  id,
+  texto,
+  estado,
+  deshabilitada,
+  onClick,
+  multilinea = false,
+}) {
+  if (multilinea) {
+    // texto largo: la fila crece en vez de usar posiciones fijas
+    return (
+      <button
+        type="button"
+        role="radio"
+        aria-checked={estado !== "normal"}
+        disabled={deshabilitada}
+        onClick={onClick}
+        className={`flex min-h-[60px] w-full items-center gap-[14px] rounded-[13px] px-[16px] py-[10px] text-left ${ESTILO_OPCION[estado]}`}
+      >
+        <span className="font-display text-[18px] font-extrabold leading-[1.12]">{id}</span>
+        <span className="flex-1 text-[14px] font-semibold leading-[1.35]">{texto}</span>
+        {MARCA[estado] && (
+          <span aria-hidden="true" className="text-[20px] font-semibold leading-none">
+            {MARCA[estado]}
+          </span>
+        )}
+      </button>
+    );
+  }
   return (
     <button
       type="button"

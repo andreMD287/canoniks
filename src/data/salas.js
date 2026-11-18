@@ -61,16 +61,16 @@ export const SALAS = [
     fondo: { src: fondoVitrinas, left: -109, ancho: 656 },
     descripcionAncho: 287,
     descripcionTop: 611,
-    reto: null,
+    reto: "r5Juego",
   },
   {
     sala: "Sala 6",
-    titulo: "El lugar que no estaba destinado para ella",
+    titulo: "¿De quién es la idea?",
     descripcion: DESCRIPCION_BARRERAS,
     fondo: { src: fondoPaneles, left: -52, ancho: 516 },
     descripcionAncho: 287,
     descripcionTop: 611,
-    reto: null,
+    reto: "r6Juego",
   },
   {
     sala: "Sala 7",
@@ -79,7 +79,7 @@ export const SALAS = [
     fondo: { src: fondoPaneles, left: -52, ancho: 516 },
     descripcionAncho: 287,
     descripcionTop: 611,
-    reto: null,
+    reto: "r7Juego",
   },
   {
     sala: "Sala 8",
@@ -88,7 +88,7 @@ export const SALAS = [
     fondo: { src: fondoPaneles, left: -52, ancho: 516 },
     descripcionAncho: 287,
     descripcionTop: 611,
-    reto: null,
+    reto: "r8Juego",
   },
   {
     sala: "Sala 9",
@@ -97,7 +97,7 @@ export const SALAS = [
     fondo: { src: fondoPaneles, left: -52, ancho: 516 },
     descripcionAncho: 287,
     descripcionTop: 611,
-    reto: null,
+    reto: "r9Juego",
   },
   {
     sala: "Sala 10",
@@ -106,6 +106,6 @@ export const SALAS = [
     fondo: { src: fondoPaneles, left: -52, ancho: 516 },
     descripcionAncho: 287,
     descripcionTop: 611,
-    reto: null,
+    reto: "r10Juego",
   },
 ];
