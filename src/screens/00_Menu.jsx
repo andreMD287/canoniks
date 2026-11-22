@@ -20,6 +20,8 @@ export default function Menu({
   descripcion,
   fondo,
   imagenCompleta,
+  sinSiguiente = false,
+  sinEntrada = false,
   ilustracion,
   // la Sala 3 lleva la descripción algo más estrecha y más abajo
   descripcionAncho = 354,
@@ -62,18 +64,22 @@ export default function Menu({
           aria-label="Sala anterior"
           className="absolute left-[-6px] top-[584px] h-[217px] w-[95px] transition-transform duration-300 hover:-translate-x-1"
         />
-        <button
-          type="button"
-          onClick={onSalaSiguiente}
-          aria-label="Sala siguiente"
-          className="absolute left-[324px] top-[584px] h-[217px] w-[95px] transition-transform duration-300 hover:translate-x-1"
-        />
-        <button
-          type="button"
-          onClick={entrar}
-          aria-label={`Entrar al expediente de ${sala}`}
-          className="absolute left-1/2 top-[765px] h-[100px] w-[220px] -translate-x-1/2"
-        />
+        {!sinSiguiente && (
+          <button
+            type="button"
+            onClick={onSalaSiguiente}
+            aria-label="Sala siguiente"
+            className="absolute left-[324px] top-[584px] h-[217px] w-[95px] transition-transform duration-300 hover:translate-x-1"
+          />
+        )}
+        {!sinEntrada && (
+          <button
+            type="button"
+            onClick={entrar}
+            aria-label={`Entrar al expediente de ${sala}`}
+            className="absolute left-1/2 top-[765px] h-[100px] w-[220px] -translate-x-1/2"
+          />
+        )}
         {aviso && (
           <p
             role="status"

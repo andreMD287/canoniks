@@ -9,6 +9,7 @@ import menuSala7 from "../assets/menu-sala7.jpg";
 import menuSala8 from "../assets/menu-sala8.jpg";
 import menuSala9 from "../assets/menu-sala9.jpg";
 import menuSala10 from "../assets/menu-sala10.jpg";
+import menuDeliberacion from "../assets/menu-deliberacion.png";
 import menuSala3 from "../assets/menu-sala3-completo.png";
 
 const DESCRIPCION_SALA_1 =
@@ -123,5 +124,17 @@ export const SALAS = [
     descripcionAncho: 287,
     descripcionTop: 611,
     reto: "r10Juego",
+  },
+  {
+    // Última pantalla: lleva al debate en clase (se hace en persona con las
+    // cartas). No tiene reto en la aplicación ni sala siguiente.
+    sala: "Sala de deliberación",
+    titulo: "Debate",
+    descripcion:
+      "Prepárate para debatir, ve a la sala de deliberación y toma un rol con las cartas dadas físicamente, y expresa tus pensamientos a través de estos.",
+    imagenCompleta: menuDeliberacion,
+    sinSiguiente: true,
+    sinEntrada: true,
+    reto: null,
   },
 ];
